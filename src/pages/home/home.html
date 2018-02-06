@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -7,12 +7,39 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+<ion-content>
+ <!--
+  <ion-grid>
+      <ion-row>
+        <ion-col col-12 col-sm-4 col-md-3>
+          <ion-card  class="about-card" (click)="openScheduler()">
+            <img src= {{Imagen}}/>
+            <ion-card-header>{{Nombre}}</ion-card-header>
+            <ion-row>
+              <ion-col>
+                <button ion-button icon-left clear small>
+                  <ion-icon name="create"></ion-icon>
+                  <div>EDIT</div>
+                </button>
+              </ion-col>
+              <ion-col>
+                <button ion-button icon-left clear small>
+                  <ion-icon name="share"></ion-icon>
+                  <div>SHARE</div>
+                </button>
+              </ion-col>
+              <ion-col center text-center>
+                <ion-note>
+                  {{Fecha}}
+                </ion-note>
+              </ion-col>
+            </ion-row>
+   
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid> 
+  -->
+    <button ion-button (click)="takePhoto()">Subir foto a firebase</button>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
 </ion-content>

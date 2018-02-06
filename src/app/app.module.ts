@@ -4,16 +4,22 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { AboutPage } from '../pages/about/about';
 import { ListPage } from '../pages/list/list';
+import { SchedulerPage } from '../pages/scheduler/scheduler';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+import { Camera } from '@ionic-native/camera'
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    AboutPage,
+    ListPage,
+    SchedulerPage
   ],
   imports: [
     BrowserModule,
@@ -23,11 +29,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    AboutPage,
+    ListPage,
+    SchedulerPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
