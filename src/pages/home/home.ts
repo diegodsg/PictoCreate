@@ -14,6 +14,10 @@ export class HomePage {
 
   schedulerList: any = {};
 
+  Imagen = 'assets/imgs/pictograma.jpg'
+  Nombre = 'Pictograma'
+  Fecha = '06/02/2018'
+
 
   constructor(public navCtrl: NavController, private camera: Camera) {
     initializeApp(FIREBASE_CONFIG);
@@ -48,7 +52,7 @@ export class HomePage {
       const pictures = storage().ref('pictures/myPhoto');
 
       pictures.putString(image, 'data_url');
-      
+
       console.log("takingPhoto...");
 
     }
