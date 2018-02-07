@@ -11,13 +11,14 @@
 
   <ion-grid>
       <ion-row>
-        <ion-col col-sm-12 col-md-4 col-lg-3>
-          <ion-card (click)="openScheduler()">
+        <ion-col *ngFor="let scheduler of schedulersService.schedulers" col-sm-12 col-md-4 col-lg-3>
+
+          <ion-card  (click)="openScheduler()">
             <img src= {{Imagen}}/>
-            <ion-card-header ><h1 padding-horizontal>{{Nombre}}</h1></ion-card-header>
+            <ion-card-header ><h1 padding-horizontal>{{scheduler.title}}</h1></ion-card-header>
             <ion-card-content>
               <p padding-horizontal>
-                Lorem Ipsum is simply dummy text of the printing.
+                {{scheduler.summary}}
               </p>
             </ion-card-content>
             <ion-row padding-horizontal>
@@ -35,54 +36,9 @@
               </ion-col>
             </ion-row>
           </ion-card>
+
         </ion-col>
-        <ion-col col-sm-12 col-md-4 col-lg-3>
-          <ion-card (click)="openScheduler()">
-            <img src= {{Imagen}}/>
-            <ion-card-header ><h1 padding-horizontal>{{Nombre}}</h1></ion-card-header>
-            <ion-card-content>
-            </ion-card-content>
-            <ion-row padding-horizontal>
-              <ion-col col-12 col-sm-6>
-                <button ion-button icon-left clear small>
-                  <ion-icon name="create"></ion-icon>
-                  <div>EDIT</div>
-              </button>
-              </ion-col>
-              <ion-col col-12 col-sm-6>
-                <button ion-button icon-left clear small center>
-                  <ion-icon name="share"></ion-icon>
-                  <div>SHARE</div>
-              </button>
-              </ion-col>
-            </ion-row>
-          </ion-card>
-        </ion-col>
-        <ion-col col-sm-12 col-md-4 col-lg-3>
-          <ion-card (click)="openScheduler()">
-            <img src= {{Imagen}}/>
-            <ion-card-header ><h1 padding-horizontal>{{Nombre}}</h1></ion-card-header>
-            <ion-card-content>
-              <p padding-horizontal>
-                Lorem Ipsum is simply dummy text of the printing.
-              </p>
-            </ion-card-content>
-            <ion-row padding-horizontal>
-              <ion-col col-12 col-sm-6>
-                <button ion-button icon-left clear small>
-                  <ion-icon name="create"></ion-icon>
-                  <div>EDIT</div>
-              </button>
-              </ion-col>
-              <ion-col col-12 col-sm-6>
-                <button ion-button icon-left clear small center>
-                  <ion-icon name="share"></ion-icon>
-                  <div>SHARE</div>
-              </button>
-              </ion-col>
-            </ion-row>
-          </ion-card>
-        </ion-col>
+
       </ion-row>
     </ion-grid>
 
