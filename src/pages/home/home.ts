@@ -36,6 +36,9 @@ export class HomePage {
     */
   }
 
+  loadCreateScheduler(){
+    this.navCtrl.push(SchedulerPage);
+  }
 
 
 

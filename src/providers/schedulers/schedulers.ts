@@ -1,5 +1,7 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
+
 
 /*
   Generated class for the SchedulersProvider provider.
@@ -12,8 +14,12 @@ export class SchedulersProvider {
 
   schedulers: any = [];
 
-  constructor() {
+  constructor(public storage: Storage) {
 
+  }
+
+  saveScheduler(scheduler){
+    storage.set("id", scheduler);
   }
 
   load(){
