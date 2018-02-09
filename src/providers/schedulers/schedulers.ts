@@ -19,7 +19,7 @@ export class SchedulersProvider {
   }
 
   saveScheduler(scheduler){
-    storage.set("id", scheduler);
+    this.storage.set("id", scheduler);
   }
 
   load(){
