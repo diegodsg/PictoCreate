@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators, NgModel } from '@angular/forms'
 
 /**
@@ -18,6 +18,8 @@ export class SchedulerPage {
 
   @ViewChild('schedulerSlider') schedulerSlider: any;
 
+  image = 'assets/imgs/placeholder_pictogram.png'
+
   //hide back button.
   hideBackFAB: boolean = false;
 
@@ -33,7 +35,7 @@ export class SchedulerPage {
   //radioButton model
   type: any;
 
-  constructor(public navCtrl: NavController, public formBuilder: FormBuilder) {
+  constructor(public navCtrl: NavController, public formBuilder: FormBuilder, public alertCtrl: AlertController) {
 
     this.slideOneForm = formBuilder.group({
         name: [''],
@@ -76,6 +78,50 @@ export class SchedulerPage {
     else{
       this.hideBackFAB=true;
     }
-}
+  }
+
+  popUpSearch(){
+    console.log("search should pop-up.")
+  }
+
+  presentPrompt() {
+    let alert = this.alertCtrl.create({
+      title: 'Login',
+      inputs: [
+        {
+          name: 'username',
+          placeholder: 'Username'
+        },
+        {
+          name: 'password',
+          placeholder: 'Password',
+          type: 'password'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+/*
+{
+  text: 'Login',
+  handler: data => {
+    if (User.isValid(data.username, data.password)) {
+      // logged in!
+    } else {
+      // invalid login
+      return false;
+    }
+  }
+}*/
+      ]
+    });
+    alert.present();
+  }
+
 
 }
