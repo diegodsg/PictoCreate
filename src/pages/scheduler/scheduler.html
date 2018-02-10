@@ -18,84 +18,92 @@
   <ion-slides #schedulerSlider (ionSlideDidChange)="slideChanged()">
 
     <ion-slide>
-      <ion-card>
-      <p *ngIf="submitAttempt" style="color: #ea6153;">Please fill out all details accurately.</p>
-      <ion-list no-lines>
-        <form [formGroup]="slideOneForm">
-
-          <ion-card padding>
-            <ion-item>
-              <ion-label floating>Nombre</ion-label>
-              <ion-input formControlName="name" type="text"></ion-input>
-            </ion-item>
-          </ion-card>
-
-          <ion-card padding>
-            <ion-item>
-              <ion-label floating>Descripción</ion-label>
-              <ion-input formControlName="description" type="text"></ion-input>
-            </ion-item>
-          </ion-card>
-
-          <ion-list formControlName="schedType" radio-group [(ngModel)]="type">
-            <ion-card padding>
-                <ion-card-header ><h1 padding-horizontal>Tipo de planificador</h1></ion-card-header>
-              <ion-item>
-                <ion-label>Imagen y Texto</ion-label>
-                <ion-radio value="isNormal" checked></ion-radio>
-              </ion-item>
-              <ion-item>
-                <ion-label>Solo Texto</ion-label>
-                <ion-radio value="isText"></ion-radio>
-              </ion-item>
-            </ion-card>
-          </ion-list>
-        </form>
-      </ion-list>
-      </ion-card>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6 offset-3>
+            <p *ngIf="submitAttempt" style="color: #ea6153;">Please fill out all details accurately.</p>
+            <ion-list>
+              <form [formGroup]="slideOneForm">
+                <ion-card padding>
+                  <ion-card-header ><h2 padding-horizontal>Definición del Planificador</h2></ion-card-header>
+                  <ion-item>
+                    <ion-label floating>Nombre</ion-label>
+                    <ion-input formControlName="name" type="text"></ion-input>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label floating>Descripción</ion-label>
+                    <ion-textarea formControlName="description"></ion-textarea>
+                  </ion-item>
+                </ion-card>
+                <ion-list formControlName="schedType" radio-group [(ngModel)]="type">
+                  <ion-card padding>
+                      <ion-card-header ><h2>Tipo de Planificador</h2></ion-card-header>
+                    <ion-item>
+                      <ion-label>Imagen y Texto</ion-label>
+                      <ion-radio value="isNormal" checked></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label>Solo Texto</ion-label>
+                      <ion-radio value="isText"></ion-radio>
+                    </ion-item>
+                  </ion-card>
+                </ion-list>
+              </form>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-slide>
-
+    <!--Second Slide-->
     <ion-slide>
 
-      <ion-list no-lines>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-sm-12 col-md-4 col-lg-3>
 
-        <form [formGroup]="slideTwoForm">
+          <ion-card>
+            <ion-card-content>
+            <ion-list no-lines>
 
-            <ion-item>
-                <ion-label floating>Username</ion-label>
-                <ion-input formControlName="username" type="text"></ion-input>
-            </ion-item>
+              <form [formGroup]="slideTwoForm">
+                <ion-item>
+                  <ion-label floating>Image</ion-label>
+                  <ion-input formControlName="image" type="text"></ion-input>
+                </ion-item>
 
-            <ion-item>
-                <ion-label floating>Privacy</ion-label>
-                <ion-select formControlName="privacy">
-                    <ion-option value="public" checked="true">Public</ion-option>
-                    <ion-option value="friends">Friends Only</ion-option>
-                    <ion-option value="private">Private</ion-option>
-                </ion-select>
-            </ion-item>
+                <ion-item>
+                  <ion-label floating>Text</ion-label>
+                  <ion-textarea formControlName="text"></ion-textarea>
+                </ion-item>
+              </form>
 
-            <ion-item>
-                <ion-label floating>Bio</ion-label>
-                <ion-textarea formControlName="bio"></ion-textarea>
-            </ion-item>
+            </ion-list>
+            <ion-fab>
+              <button ion-fab color="secondary" (click)="addField()" ><ion-icon name="add"></ion-icon></button>
+            </ion-fab>
+          </ion-card-content>
+          </ion-card>
 
-        </form>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-    </ion-list>
 
-    <button ion-button full color="primary" (click)="save()">Create Account!</button>
 
     </ion-slide>
 
   </ion-slides>
 
-  <ion-fab bottom right margin-bottom margin-right>
-    <button ion-fab color="secondary" (click)="next()" ><ion-icon name="arrow-forward"></ion-icon></button>
+  <ion-fab [hidden]="hideBackFAB" bottom right margin-bottom margin-right>
+    <button ion-fab color="secondary" (click)="save()" ><ion-icon name="checkmark"></ion-icon></button>
   </ion-fab>
 
-  <ion-fab [hidden]="buttonClicked" bottom left margin-bottom margin-left>
-    <button ion-fab color="secondary" (click)="prev()" ><ion-icon name="arrow-back"></ion-icon></button>
+  <ion-fab [hidden]="!hideBackFAB" bottom right margin-bottom margin-right>
+    <button ion-fab color="primary" (click)="next()" ><ion-icon name="arrow-forward"></ion-icon></button>
+  </ion-fab>
+
+  <ion-fab [hidden]="hideBackFAB" bottom left margin-bottom margin-left>
+    <button ion-fab color="primary" (click)="prev()" ><ion-icon name="arrow-back"></ion-icon></button>
   </ion-fab>
 
 </ion-content>

@@ -18,13 +18,16 @@ export class SchedulerPage {
 
   @ViewChild('schedulerSlider') schedulerSlider: any;
 
-  public buttonClicked: boolean = false; //hide or show back button.
+  //hide back button.
+  hideBackFAB: boolean = false;
 
-  //1 formGroup / Slide
+  //Description Form
   slideOneForm: FormGroup;
+
+  //Scheduler Content Form
   slideTwoForm: FormGroup;
 
-  //submit button.
+  //wrong submit msg warning
   submitAttemp: boolean = true;
 
   //radioButton model
@@ -39,15 +42,13 @@ export class SchedulerPage {
     });
 
     this.slideTwoForm = formBuilder.group({
-        username: [''],
-        privacy: [''],
-        bio: ['']
+        image: [''],
+        text: [''],
     });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SchedulerPage');
-    this.buttonClicked = true;
+    this.hideBackFAB = true;
   }
 
   next() {
@@ -58,6 +59,10 @@ export class SchedulerPage {
     this.schedulerSlider.slidePrev();
   }
 
+  addField(){
+    console.log("trying to add field...")
+  }
+
   save() {
     console.log(this.slideOneForm.value);
     console.log(this.slideTwoForm.value);
@@ -65,12 +70,11 @@ export class SchedulerPage {
 
   slideChanged() {
     let currentIndex = this.schedulerSlider.getActiveIndex();
-    console.log('Current index is', currentIndex);
     if(currentIndex!=0){
-      this.buttonClicked=false;
+      this.hideBackFAB=false;
     }
     else{
-      this.buttonClicked=true;
+      this.hideBackFAB=true;
     }
 }
 
