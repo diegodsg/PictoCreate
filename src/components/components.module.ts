@@ -3,9 +3,11 @@ import { FilterSearchComponent } from './filter-search/filter-search';
 import { SchedulerDetailComponent } from './scheduler-detail/scheduler-detail';
 @NgModule({
 	declarations: [FilterSearchComponent,
-    SchedulerDetailComponent],
+    SchedulerDetailComponent,
+    ],
 	imports: [],
 	exports: [FilterSearchComponent,
-    SchedulerDetailComponent]
+    SchedulerDetailComponent,
+    ]
 })
 export class ComponentsModule {}
