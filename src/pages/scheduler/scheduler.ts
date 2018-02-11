@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-import { FormBuilder, FormGroup, Validators, NgModel } from '@angular/forms'
+import { FormControl, FormBuilder, FormGroup, FormArray, Validators, NgModel } from '@angular/forms'
 
 /**
  * Generated class for the SchedulerPage page.
@@ -35,6 +35,9 @@ export class SchedulerPage {
   //radioButton model
   type: any;
 
+  //items ara
+  items: any[]=[];
+
   constructor(public navCtrl: NavController, public formBuilder: FormBuilder, public alertCtrl: AlertController) {
 
     this.slideOneForm = formBuilder.group({
@@ -44,13 +47,32 @@ export class SchedulerPage {
     });
 
     this.slideTwoForm = formBuilder.group({
-        image: [''],
-        text: [''],
+        items: this.formBuilder.array([this.createItem()])
+    });
+
+    }
+
+  createItem(): FormGroup {
+    return this.formBuilder.group({
+      image: '',
+      text: ''
     });
   }
 
+/*
+  addItem(): void {
+    this.items = this.slideTwoForm.get('items') as FormArray;
+    this.items.push(this.createItem());
+  }
+*/
+
   ionViewDidLoad() {
     this.hideBackFAB = true;
+    this.slideTwoForm = this.formBuilder.group({
+      image: '',
+      text: '',
+      items: this.formBuilder.array([this.createItem()])
+    });
   }
 
   next() {

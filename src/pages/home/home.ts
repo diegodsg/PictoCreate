@@ -3,11 +3,14 @@ import { NavController } from 'ionic-angular';
 import { storage, initializeApp } from 'firebase';
 import { FIREBASE_CONFIG } from '../../app/firebase.config';
 
+
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 
 import { SchedulerPage } from '../../pages/scheduler/scheduler'
+import { NewSchedulerPage } from '../../pages/new-scheduler/new-scheduler'
+
 
 @Component({
   selector: 'page-home',
@@ -37,7 +40,7 @@ export class HomePage {
   }
 
   loadCreateScheduler(){
-    this.navCtrl.push(SchedulerPage);
+    this.navCtrl.push(NewSchedulerPage);
   }
 
 
