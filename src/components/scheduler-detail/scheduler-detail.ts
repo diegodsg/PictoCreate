@@ -79,4 +79,8 @@ export class SchedulerDetailComponent implements OnChanges {
     console.log(type);
   }
 
+  save(){
+    console.log("attempting to save data");
+  }
+
 }

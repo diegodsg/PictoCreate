@@ -11,7 +11,7 @@ import { SchedulerPage } from '../pages/scheduler/scheduler';
 import { NewSchedulerPage } from '../pages/new-scheduler/new-scheduler'
 
 //Components
-import { SchedulerDetailComponent } from '../components/scheduler-detail/scheduler-detail'
+//import { SchedulerDetailComponent } from '../components/scheduler-detail/scheduler-detail'
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -30,7 +30,7 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     ListPage,
     SchedulerPage,
     NewSchedulerPage,
-    SchedulerDetailComponent
+    //SchedulerDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +46,7 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     ListPage,
     SchedulerPage,
     NewSchedulerPage,
-    SchedulerDetailComponent
+    //SchedulerDetailComponent
   ],
   providers: [
     StatusBar,
