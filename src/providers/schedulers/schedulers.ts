@@ -1,7 +1,7 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Scheduler, Items } from '../../models/data-models';
+import { Scheduler, Items } from '../../models/data-model';
 
 /*
   Generated class for the SchedulersProvider provider.
@@ -13,13 +13,14 @@ import { Scheduler, Items } from '../../models/data-models';
 @Injectable()
 export class SchedulersProvider {
 
-  schedulers: Scheduler = [];
+  //schedulers: Scheduler = [];
 
   constructor(public storage: Storage) {
 
   }
 
   saveScheduler(scheduler: Scheduler){
+    /*
     let id = Math.random(4);
     console.log("data"+id+ "stored with id=" + id);
     this.storage.set(id, scheduler);
@@ -28,14 +29,11 @@ export class SchedulersProvider {
     this.storage.get(id).then((val)=>{
       console.log(val);
     })
-  }
+  */
+}
 
   load(){
-    this.schedulers = [
-      {title: 'Sched 1', summary: 'Sched summary 1'},
-      {title: 'Sched 2', summary: 'Sched summary 2'},
-      {title: 'Sched 3', summary: 'Sched summary 3'}
-    ];
+      //
   }
 
   addItem(){

@@ -9,6 +9,7 @@ import { AboutPage } from '../pages/about/about';
 import { ListPage } from '../pages/list/list';
 import { SchedulerPage } from '../pages/scheduler/scheduler';
 import { NewSchedulerPage } from '../pages/new-scheduler/new-scheduler'
+import { SearchPictogramPage } from '../pages/search-pictogram/search-pictogram'
 
 //Components
 //import { SchedulerDetailComponent } from '../components/scheduler-detail/scheduler-detail'
@@ -18,6 +19,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera'
 import { IonicStorageModule } from '@ionic/storage';
 import { ReactiveFormsModule } from '@angular/forms'
+
+//import { Scheduler, Items } from '../models/data-model'
 
 //providers
 import { SchedulersProvider } from '../providers/schedulers/schedulers';
@@ -30,7 +33,7 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     ListPage,
     SchedulerPage,
     NewSchedulerPage,
-    //SchedulerDetailComponent
+    SearchPictogramPage
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,7 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     ListPage,
     SchedulerPage,
     NewSchedulerPage,
-    //SchedulerDetailComponent
+    SearchPictogramPage
   ],
   providers: [
     StatusBar,

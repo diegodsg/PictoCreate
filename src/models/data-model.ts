@@ -1,3 +1,6 @@
+import { Injectable } from '@angular/core';
+
+@Injectable()
 export class Scheduler {
   id = 0;
   name = '';
@@ -5,6 +8,7 @@ export class Scheduler {
   items: Items[];
 }
 
+@Injectable()
 export class Items {
   image = 'assets/imgs/placeholder_pictogram.png';
   text = '';
