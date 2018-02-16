@@ -75,6 +75,11 @@ export class NewSchedulerPage implements OnChanges {
   pictogramSearch(i){
     console.log(i+" clicked")
     let modal = this.modalCtrl.create(SearchPictogramPage);
+
+    modal.onDidDismiss((data)=>{
+      console.log('modal said data');
+    })
+
     modal.present();
   }
 /*
