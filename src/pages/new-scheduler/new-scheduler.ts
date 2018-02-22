@@ -12,13 +12,13 @@ import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogr
  * Ionic pages and navigation.
  */
 
+
 @IonicPage()
 @Component({
   selector: 'page-new-scheduler',
   templateUrl: 'new-scheduler.html',
 })
 export class NewSchedulerPage implements OnChanges {
-
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private fb: FormBuilder,
@@ -30,9 +30,11 @@ export class NewSchedulerPage implements OnChanges {
   @Input() scheduler: Scheduler;
   schedulerForm: FormGroup;
 
+  textOnly : boolean = false; //Controls show/hide images
+
   ionViewDidLoad() {
-  console.log('ionViewDidLoad NewSchedulerPage');
-}
+    this.schedulerForm.patchValue({type: 'isNormal'});
+  }
 
   createForm(){
     this.schedulerForm = this.fb.group({
@@ -71,25 +73,24 @@ export class NewSchedulerPage implements OnChanges {
     this.setItems(this.scheduler.items)
   }
 
-  select(type: ''){
-    console.log(type);
+  select(type){
+    if(type == "isText"){
+      this.textOnly = true;
+    }
+    else{
+      this.textOnly = false;
+    }
   }
 
   pictogramSearch(i){
-    console.log(i+" clicked")
     let modal: Modal = this.modalCtrl.create(SearchPictogramPage);
-
     modal.present();
-
     modal.onDidDismiss((data)=>{
       console.log(data);
       if(data != null){
         this.items.controls[i].patchValue({image: data.url});
-        this.schedulerForm.value.items[i].image = data.url;
       }
     })
-
-
   }
 
     save(){

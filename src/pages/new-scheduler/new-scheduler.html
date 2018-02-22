@@ -51,7 +51,7 @@
               <ion-col col-sm-12 col-md-3 col-lg-2 *ngFor="let item of items.controls; let i=index" [formGroupName]="i">
                   <ion-card>
                       <ion-card-content>
-                          <img src="{{schedulerForm.get('items').value[i].image}}" class="picto_image" (click)="pictogramSearch(i)" />
+                          <img src="{{schedulerForm.get('items').value[i].image}}" [hidden]=textOnly class="picto_image" (click)="pictogramSearch(i)" />
                           <ion-list no-lines>
                               <ion-item [hidden]=true>
                                   <ion-label floating>Image</ion-label>
@@ -69,7 +69,7 @@
               </ion-col>
               <!--Add picto-->
               <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center>
-                          <button ion-button color="primary" (click)="addItem()" type="button"><ion-icon name="add"></ion-icon>AÑADIR PICTO</button>
+                          <button ion-button color="primary" (click)="addItem()" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
 
               </ion-col>
           </ion-row>
