@@ -5,6 +5,9 @@ import { IonicPage, NavController, NavParams,
          LoadingController, Searchbar  } from 'ionic-angular';
 
 import { Http } from '@angular/http';
+//import { HttpClientModule } from '@angular/common/http';
+//import { HttpModule } from '@angular/http';
+
 import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map' //add aditional properties of an Observable
 
@@ -42,7 +45,7 @@ export class SearchPictogramPage {
   constructor(public navCtrl: NavController,
               public params: NavParams,
               public platform: Platform,
-              //public http: Http,
+              public http: Http,
               public storage: Storage,
               public loadingCtrl: LoadingController,
               public viewCtrl: ViewController) {
@@ -51,15 +54,14 @@ export class SearchPictogramPage {
 		 	if(this.platform.is('android') && !this.platform.is('mobileweb')){
 		 	path = "/android_asset/www";
 		}
-/*
+
 	 	http.get(path+'/res/img/arasaac.json').map(res => res.json())
 	 		.subscribe(data => {
 				this.pictograms = data;
-
 	 		});
 
 		storage.get("_favourites").then((data) => {
-			//console.log(data);
+			console.log(data);
 			if(data !== null){
 				this.favourites = data;
 				this.onSearch("");
@@ -67,13 +69,13 @@ export class SearchPictogramPage {
 		});
 
 		storage.get("_personalPicto").then((data) => {
-			//console.log("personal pictos", data);
+			console.log("personal pictos", data);
 			if(data !== null){
 				this.personal = data;
 				this.onSearch("");
 			}
 		});
-*/
+
   }
 
 
@@ -174,8 +176,6 @@ export class SearchPictogramPage {
   	ngAfterViewInit() {
 
   	}
-
-
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchPictogramPage');

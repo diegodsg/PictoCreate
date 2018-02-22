@@ -10,7 +10,7 @@ export class Scheduler {
 
 @Injectable()
 export class Items {
-  image = 'assets/imgs/placeholder_pictogram.png';
+  image = '';
   text = '';
 }
 

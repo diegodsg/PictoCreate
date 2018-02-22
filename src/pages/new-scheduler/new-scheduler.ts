@@ -1,4 +1,4 @@
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, Modal } from 'ionic-angular';
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { Items, Scheduler } from '../../models/data-model';
@@ -53,12 +53,15 @@ export class NewSchedulerPage implements OnChanges {
   }
 
   addItem(){
-    this.items.push(this.fb.group(new Items()));
+    let newItem = new Items();
+    newItem.image = "assets/imgs/placeholder_pictogram.png"
+    this.items.push(this.fb.group(newItem));
   }
 
   deleteItem(index: any){
     this.items.removeAt(index);
   }
+
 
   ngOnChanges(){
     this.schedulerForm.reset({
@@ -74,20 +77,26 @@ export class NewSchedulerPage implements OnChanges {
 
   pictogramSearch(i){
     console.log(i+" clicked")
-    let modal = this.modalCtrl.create(SearchPictogramPage);
-
-    modal.onDidDismiss((data)=>{
-      console.log('modal said data');
-    })
+    let modal: Modal = this.modalCtrl.create(SearchPictogramPage);
 
     modal.present();
+
+    modal.onDidDismiss((data)=>{
+      console.log(data);
+      if(data != null){
+        this.items.controls[i].patchValue({image: data.url});
+        this.schedulerForm.value.items[i].image = data.url;
+      }
+    })
+
+
   }
-/*
+
     save(){
-      //sconsole.log(this.schedulerForm.value);
-      this.schedulerService.saveScheduler(this.schedulerForm.value);
+      console.log(this.schedulerForm.value);
+      //this.schedulerService.saveScheduler(this.schedulerForm.value);
     }
-*/
+
 
 /*
     onSubmit() {

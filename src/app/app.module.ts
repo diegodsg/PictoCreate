@@ -3,6 +3,10 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
+import {HttpClientModule} from '@angular/common/http';
+import {HttpModule} from '@angular/http';
+
+
 //Pages
 import { HomePage } from '../pages/home/home';
 import { AboutPage } from '../pages/about/about';
@@ -39,6 +43,8 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     ReactiveFormsModule,
+    HttpModule,
+    HttpClientModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -56,7 +62,8 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     SplashScreen,
     Camera,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SchedulersProvider
+    SchedulersProvider,
+    HttpClientModule
   ]
 })
 export class AppModule {}
