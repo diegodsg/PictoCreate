@@ -23,12 +23,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera'
 import { IonicStorageModule } from '@ionic/storage';
 import { ReactiveFormsModule } from '@angular/forms'
-import { File } from '@ionic-native/file';
+//import { File } from '@ionic-native/file';
 //import { Scheduler, Items } from '../models/data-model'
 
 //providers
 import { SchedulersProvider } from '../providers/schedulers/schedulers';
-import { Screenshot } from '@ionic-native/screenshot'
+//import { Screenshot } from '@ionic-native/screenshot'
 
 
 
@@ -67,8 +67,8 @@ import { Screenshot } from '@ionic-native/screenshot'
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SchedulersProvider,
     HttpClientModule,
-    Screenshot,
-    File,
+    //Screenshot,
+    //File,
   ]
 })
 export class AppModule {}

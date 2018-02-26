@@ -14,9 +14,9 @@
     <ion-card-content [hidden]="!hasImages">
           <ion-grid>
               <ion-row>
-                  <ion-col class="PictoItem" col-sm-12 col-md-3 col-lg-2 *ngFor="let item of currentScheduler.items">
+                  <ion-col class="PictoItem" col-2 col-half-offset *ngFor="let item of currentScheduler.items">
                     <img src="{{item.image}}"/>
-                    <p>{{item.text}}</p>
+                    <p class="PictoText">{{item.text}}</p>
                   </ion-col>
               </ion-row>
           </ion-grid>

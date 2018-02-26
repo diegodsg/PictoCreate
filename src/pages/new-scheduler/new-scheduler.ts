@@ -6,11 +6,11 @@ import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogr
 import { SchedulerPage } from '../../pages/scheduler/scheduler'
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
-import { Screenshot } from '@ionic-native/screenshot'
+//import { Screenshot } from '@ionic-native/screenshot'
 
 
 
-import { File } from '@ionic-native/file';
+//import { File } from '@ionic-native/file';
 
 /**
  * Generated class for the NewSchedulerPage page.
@@ -31,8 +31,9 @@ export class NewSchedulerPage implements OnChanges {
               private fb: FormBuilder,
               public modalCtrl: ModalController,
               public schedulerService: SchedulersProvider,
-              private screenshot: Screenshot,
-              private file: File,) {
+              //private screenshot: Screenshot,
+              //private file: File,
+            ) {
     this.createForm();
   }
 
@@ -109,7 +110,7 @@ export class NewSchedulerPage implements OnChanges {
     savePicto(){
       //create random ID
       let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
+/*
       this.screenshot.URI(10).then(res=>{
         //console.log(res);
       });
@@ -120,12 +121,10 @@ export class NewSchedulerPage implements OnChanges {
       //creates dataDirectory/preview directory if it doesn't exist
       this.file.createDir(path, 'previews', false).then(res=>{
         //console.log(res);
-      }, res=>{/*console.log('error')*/});
+      }, res=>{console.log('error')});
 
       //path for the preview screenshot
       let url = path + '/previews/' + id;
-
-
 
       //take the screenshot and save it to the url
       this.screenshot.URI(30).then(image=>{
@@ -133,6 +132,8 @@ export class NewSchedulerPage implements OnChanges {
               //console.log(res);
           })
       });
+*/
+      let path  = this.schedulerForm.get('items').value[0].image;
       //save name, type and items
       this.scheduler = this.schedulerForm.value;
 
@@ -140,7 +141,7 @@ export class NewSchedulerPage implements OnChanges {
       this.scheduler.id = id;
 
       //save preview url
-      this.scheduler.preview = url+'.jpg';
+      this.scheduler.preview = path;
 
       //call to the provider in order to permanently-store it
       this.schedulerService.addScheduler(this.scheduler);

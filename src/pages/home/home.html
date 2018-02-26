@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <p [hidden]=schedulersService.emptyList> No hay planificadores creados aún !</p>
+  <p [hidden]=!schedulersService.emptyList> No hay planificadores creados aún !</p>
   <ion-grid>
       <ion-row>
         <ion-col *ngFor="let scheduler of schedulersService.scheds" col-sm-12 col-md-4 col-lg-3>
