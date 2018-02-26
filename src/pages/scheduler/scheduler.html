@@ -5,14 +5,23 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar color="primary">
-    <ion-title>Planificador</ion-title>
+    <ion-title>{{currentScheduler.name}}</ion-title>
   </ion-navbar>
-
 </ion-header>
 <ion-content>
-
-<p>{{currentScheduler.name}}</p>
-
+  <ion-card>
+    <ion-card-content [hidden]="!hasImages">
+          <ion-grid>
+              <ion-row>
+                  <ion-col class="PictoItem" col-sm-12 col-md-3 col-lg-2 *ngFor="let item of currentScheduler.items">
+                    <img src="{{item.image}}"/>
+                    <p>{{item.text}}</p>
+                  </ion-col>
+              </ion-row>
+          </ion-grid>
+    </ion-card-content>
+    <ion-card-content [hidden]="hasImages">
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -17,20 +17,21 @@ import { Scheduler, Items, SchedulerList } from '../../models/data-model'
 })
 export class SchedulerPage {
 
-  image = 'assets/imgs/placeholder_pictogram.png'
-  schedulerId = '';
   currentScheduler : Scheduler = new Scheduler;
+  hasImages : boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public schedulerService: SchedulersProvider) {
-    this.schedulerId = this.navParams.get("schedulerId");
-    this.schedulerService.getScheduler(this.schedulerId);
+    this.currentScheduler = this.navParams.get("scheduler");
+    //this.schedulerService.getScheduler(this.schedulerId);
   }
 
   ionViewDidLoad() {
-  }
-
-  ionViewWillEnter(){
-    this.currentScheduler = this.schedulerService.scheduler;
+    console.log(this.currentScheduler);
+    if(this.currentScheduler.type == 'isText'){
+      this.hasImages = false;
+    }else{
+      this.hasImages = true;
+    }
   }
 
 }

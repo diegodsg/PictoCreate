@@ -2,14 +2,12 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { storage, initializeApp } from 'firebase';
 import { FIREBASE_CONFIG } from '../../app/firebase.config';
-
-
 import { Camera, CameraOptions } from '@ionic-native/camera';
-
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
-
-import { SchedulerPage } from '../../pages/scheduler/scheduler'
-import { NewSchedulerPage } from '../../pages/new-scheduler/new-scheduler'
+import { SchedulerPage } from '../../pages/scheduler/scheduler';
+import { NewSchedulerPage } from '../../pages/new-scheduler/new-scheduler';
+import { Scheduler, Items } from '../../models/data-model';
+import { StatusBar } from '@ionic-native/status-bar'
 
 
 @Component({
@@ -22,8 +20,9 @@ export class HomePage {
 
   Imagen = 'assets/imgs/pictograma.jpg'
 
-  constructor(public navCtrl: NavController, public schedulersService: SchedulersProvider) {
+  constructor(public navCtrl: NavController, public schedulersService: SchedulersProvider, private statusBar: StatusBar) {
     initializeApp(FIREBASE_CONFIG);
+    this.statusBar.backgroundColorByHexString('#2085c1');
   }
 
   ionViewDidLoad(){
@@ -42,10 +41,10 @@ export class HomePage {
   }
 
 
-  openScheduler(id){
-    console.log('card '+id+' clicked');
+  openScheduler(scheduler : Scheduler){
+    //((console.log('card '+this.schedulersService.scheds.find(id)+' clicked');
     this.navCtrl.push(SchedulerPage,{
-      schedulerId: id
+      scheduler : scheduler
     });
 
   }
