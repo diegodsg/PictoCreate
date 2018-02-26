@@ -44,7 +44,6 @@ export class HomePage {
 
   openScheduler(id){
     console.log('card '+id+' clicked');
-    this.navCtrl.push(SchedulerPage, id);
     this.navCtrl.push(SchedulerPage,{
       schedulerId: id
     });

@@ -13,7 +13,7 @@ import { Scheduler, Items, SchedulerList } from '../../models/data-model';
 @Injectable()
 export class SchedulersProvider {
 
-  scheds : any = [];
+  scheds : Scheduler[];
   key = '_schedulers';
   listSize = 0;
   emptyList = true;
@@ -69,14 +69,13 @@ export class SchedulersProvider {
             this.emptyList=false;
           }
           this.scheds=val;
-          console.log(this.scheds);
         });
   }
 
 getScheduler(id){
   this.storage.get(this.key).then((val) => {
     for(var i=0; i<val.length; i++){
-      if(val[i].id==id){
+      if(val[i].id == id){
         this.scheduler = val[i];
       }
     }

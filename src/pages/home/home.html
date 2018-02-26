@@ -13,7 +13,7 @@
       <ion-row>
         <ion-col *ngFor="let scheduler of schedulersService.scheds" col-sm-12 col-md-4 col-lg-3>
           <ion-card  (click)="openScheduler(scheduler.id)">
-            <img src= {{scheduler.preview}}/>
+            <img src = {{scheduler.preview}}/>
             <ion-card-header ><h1 padding-horizontal>{{scheduler.name}}</h1></ion-card-header>
             <ion-row padding-horizontal>
               <ion-col col-12 col-sm-6>

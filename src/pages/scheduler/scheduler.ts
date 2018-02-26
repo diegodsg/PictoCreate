@@ -19,18 +19,18 @@ export class SchedulerPage {
 
   image = 'assets/imgs/placeholder_pictogram.png'
   schedulerId = '';
+  currentScheduler : Scheduler = new Scheduler;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public schedulerService: SchedulersProvider) {
-    this.schedulerId = this.navParams.get("schedulerID");
+    this.schedulerId = this.navParams.get("schedulerId");
     this.schedulerService.getScheduler(this.schedulerId);
   }
 
   ionViewDidLoad() {
-    console.log(this.schedulerService.scheduler);
   }
 
   ionViewWillEnter(){
-    this.schedulerService.load();
+    this.currentScheduler = this.schedulerService.scheduler;
   }
 
 }
