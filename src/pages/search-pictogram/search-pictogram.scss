@@ -1,15 +1,16 @@
 page-search-pictogram {
   	ion-header{
-  		ion-toolbar{
-  			ion-segment{
-  				ion-segment-button.segment-button{
-  					font-size: 2rem !important;
-  					border-bottom-width: 4px !important;
-  					&.segment-activated{
-  						background-color: #CDDC39;
-  					}
-  				}
-  			}
+  		ion-segment{
+        ion-segment-button.segment-button{
+          font-size: 1.5rem !important;
+          border-bottom-width: 3px !important;
+          &.segment-activated{
+            color: #FFFFFF !important;
+            background-color: map-get($colors, primary) !important;
+            border-bottom-color: map-get($colors, primary) !important;
+
+          }
+        }
   		}
   	}
   	ion-footer{
@@ -28,4 +29,14 @@ page-search-pictogram {
   			min-height: 200px;
   		}
   	}
+}
+
+.card-subtitle{
+  text-align: center;
+  padding-bottom: 8px;
+  font-weight: lighter;
+}
+
+.searchImage{
+  padding: 20px;
 }

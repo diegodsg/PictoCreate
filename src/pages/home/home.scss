@@ -2,9 +2,20 @@ page-home {
 
 }
 
-
-
 #picto-card-row{
   display: flex;
   vertical-align: middle;
+}
+
+.cardButtons{
+  text-align: center;
+  font-size: 1em;
+  color: map-get($colors, primary);
+}
+
+.schedulerTitle{
+  font-size: 1.5em !important;
+  padding-top: 10px;
+  padding-left: 20px;
+
 }

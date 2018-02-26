@@ -12,21 +12,26 @@
   <ion-grid>
       <ion-row>
         <ion-col *ngFor="let scheduler of schedulersService.scheds" col-sm-12 col-md-4 col-lg-3>
-          <ion-card  (click)="openScheduler(scheduler)">
-            <img src = {{scheduler.preview}}/>
-            <ion-card-header ><h1 padding-horizontal>{{scheduler.name}}</h1></ion-card-header>
-            <ion-row padding-horizontal>
-              <ion-col col-12 col-sm-6>
-                <button ion-button icon-left clear small>
+          <ion-card>
+            <p class="schedulerTitle">{{scheduler.name}}</p>
+            <hr>
+            <img src = {{Imagen}} (click)="openScheduler(scheduler)"/>
+            <hr>
+            <ion-row class="cardButtons">
+              <ion-col col-4>
+                <button ion-button full clear>
                   <ion-icon name="create"></ion-icon>
-                  <div>EDIT</div>
-              </button>
+                </button>
               </ion-col>
-              <ion-col col-12 col-sm-6>
-                <button ion-button icon-left clear small center>
+              <ion-col col-4>
+                <button ion-button full clear>
                   <ion-icon name="share"></ion-icon>
-                  <div>SHARE</div>
-              </button>
+                </button>
+              </ion-col>
+              <ion-col col-4>
+                <button ion-button full clear>
+                  <ion-icon name="trash"></ion-icon>
+                </button>
               </ion-col>
             </ion-row>
           </ion-card>

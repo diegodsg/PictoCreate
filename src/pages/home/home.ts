@@ -18,7 +18,7 @@ export class HomePage {
 
   schedulerList: any = {};
 
-  //Imagen = 'assets/imgs/pictograma.jpg'
+  Imagen = 'assets/imgs/pictograma.jpg'
 
   constructor(public navCtrl: NavController, public schedulersService: SchedulersProvider, private statusBar: StatusBar) {
     initializeApp(FIREBASE_CONFIG);
