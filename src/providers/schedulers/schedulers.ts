@@ -1,7 +1,7 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Scheduler, Items } from '../../models/data-model';
+import { Scheduler, Items, SchedulerList } from '../../models/data-model';
 
 /*
   Generated class for the SchedulersProvider provider.
@@ -13,31 +13,74 @@ import { Scheduler, Items } from '../../models/data-model';
 @Injectable()
 export class SchedulersProvider {
 
+  scheds : any = [];
+  key = '_schedulers';
+  listSize = 0;
+  emptyList = true;
+  scheduler : Scheduler;
   //schedulers: Scheduler = [];
 
   constructor(public storage: Storage) {
 
   }
 
-  saveScheduler(scheduler: Scheduler){
-    /*
-    let id = Math.random(4);
-    console.log("data"+id+ "stored with id=" + id);
-    this.storage.set(id, scheduler);
+  addScheduler(scheduler: Scheduler){
+      this.storage.get(this.key).then((res) => {
+          if(res==undefined){
+              res = [];
+          }
+          this.storage.get('listSize').then((numScheds) => {
+              if(numScheds==undefined){
+                  numScheds = 1;
+              }
+              numScheds++;
+              res.push(scheduler);
+              console.log(res);
+              this.storage.set(this.key, res);
+              this.storage.set('listSize',numScheds);
+          });
+      });
 
-    console.log("se obtiene ");
-    this.storage.get(id).then((val)=>{
-      console.log(val);
-    })
-  */
+  }
+
+
+  saveScheduler(scheduler: Scheduler){
+    //console.log(scheduler);
+    this.storage.get(this.key).then(res=>{
+      let list = [];
+      list = res;
+      list.push(scheduler);
+      console.log('lista es'+ list);
+      this.storage.set(this.key, list).then(res=>{
+        console.log('added items');
+      });
+    });
 }
 
   load(){
-      //
+    this.storage.get(this.key).then((val) => {
+          if(val == null){
+            this.emptyList=true;
+          }
+          else if(val.length == 0){
+            this.emptyList=true;
+          }
+          else{
+            this.emptyList=false;
+          }
+          this.scheds=val;
+          console.log(this.scheds);
+        });
   }
 
-  addItem(){
-    //DoStuff.
-  }
+getScheduler(id){
+  this.storage.get(this.key).then((val) => {
+    for(var i=0; i<val.length; i++){
+      if(val[i].id==id){
+        this.scheduler = val[i];
+      }
+    }
+  });
+}
 
 }

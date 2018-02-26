@@ -3,7 +3,14 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { Items, Scheduler } from '../../models/data-model';
 import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogram'
-//import { SchedulersProvider } from '../../providers/schedulers/schedulers'
+import { SchedulerPage } from '../../pages/scheduler/scheduler'
+
+import { SchedulersProvider } from '../../providers/schedulers/schedulers'
+import { Screenshot } from '@ionic-native/screenshot'
+
+
+
+import { File } from '@ionic-native/file';
 
 /**
  * Generated class for the NewSchedulerPage page.
@@ -22,8 +29,10 @@ export class NewSchedulerPage implements OnChanges {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private fb: FormBuilder,
-              public modalCtrl: ModalController
-            /*public schedulerService: SchedulersProvider*/) {
+              public modalCtrl: ModalController,
+              public schedulerService: SchedulersProvider,
+              private screenshot: Screenshot,
+              private file: File,) {
     this.createForm();
   }
 
@@ -31,6 +40,9 @@ export class NewSchedulerPage implements OnChanges {
   schedulerForm: FormGroup;
 
   textOnly : boolean = false; //Controls show/hide images
+
+  screen: any;
+  state: boolean = false;
 
   ionViewDidLoad() {
     this.schedulerForm.patchValue({type: 'isNormal'});
@@ -93,9 +105,47 @@ export class NewSchedulerPage implements OnChanges {
     })
   }
 
-    save(){
-      console.log(this.schedulerForm.value);
-      //this.schedulerService.saveScheduler(this.schedulerForm.value);
+
+    savePicto(){
+      //create random ID
+      let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+      this.screenshot.URI(10).then(res=>{
+        //console.log(res);
+      });
+
+      //android filesystem path
+      let path = this.file.dataDirectory;
+
+      //creates dataDirectory/preview directory if it doesn't exist
+      this.file.createDir(path, 'previews', false).then(res=>{
+        //console.log(res);
+      }, res=>{/*console.log('error')*/});
+
+      //path for the preview screenshot
+      let url = path + '/previews/' + id;
+
+
+
+      //take the screenshot and save it to the url
+      this.screenshot.URI(30).then(image=>{
+          this.file.writeFile(path, id+'.jpg', image,  {append: false, replace:false}).then(res=>{
+              //console.log(res);
+          })
+      });
+      //save name, type and items
+      this.scheduler = this.schedulerForm.value;
+
+      //save randomly-generated id
+      this.scheduler.id = id;
+
+      //save preview url
+      this.scheduler.preview = url+'.jpg';
+
+      //call to the provider in order to permanently-store it
+      this.schedulerService.addScheduler(this.scheduler);
+
+      this.navCtrl.pop();
     }
 
 
@@ -106,5 +156,8 @@ export class NewSchedulerPage implements OnChanges {
       this.ngOnChanges();
     }
 */
+
+
+
 
   }

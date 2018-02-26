@@ -27,16 +27,28 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
+    console.log('look right');
+    console.log(this.schedulersService.scheds);
+  }
+
+  ionViewWillEnter(){
     this.schedulersService.load();
   }
 
-  openScheduler(){
-    console.log("card clicked");
-    /*
+  ionViewDidEnter(){
+    this.schedulersService.load();
+    console.log(this.schedulersService.scheds);
+
+  }
+
+
+  openScheduler(id){
+    console.log('card '+id+' clicked');
+    this.navCtrl.push(SchedulerPage, id);
     this.navCtrl.push(SchedulerPage,{
-      schedulerId: scheduler.id
+      schedulerId: id
     });
-    */
+
   }
 
   loadCreateScheduler(){
