@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ViewController } from 'ionic-angular';
+import { NavController, ViewController, AlertController, ActionSheetController } from 'ionic-angular';
 import { storage, initializeApp } from 'firebase';
 import { FIREBASE_CONFIG } from '../../app/firebase.config';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -21,9 +21,12 @@ export class HomePage {
   Imagen = 'assets/imgs/pictograma.jpg'
 
   constructor(public navCtrl: NavController,
-     public schedulersService: SchedulersProvider,
-    private statusBar: StatusBar,
-    private viewCtrl: ViewController) {
+              public schedulersService: SchedulersProvider,
+              private statusBar: StatusBar,
+              private viewCtrl: ViewController,
+              private alertCtrl: AlertController,
+              public actionSheetCtrl: ActionSheetController
+              ){
     initializeApp(FIREBASE_CONFIG);
     this.statusBar.backgroundColorByHexString('#2085c1');
   }
@@ -56,9 +59,58 @@ export class HomePage {
     this.navCtrl.push(NewSchedulerPage);
   }
 
+  shareScheduler(id){
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Compartir/Exportar Planificador',
+      buttons: [
+        {
+
+          text: 'Exportar como PDF',
+          icon: 'document',
+          handler: () => {
+            console.log('exportar clicked');
+          }
+        },{
+          text: 'Exportar como Imágenes',
+          icon: 'photos',
+          handler: () => {
+            console.log('Archive clicked');
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
   deleteScheduler(id){
-    this.schedulersService.deleteScheduler(id);
-    //this.viewCtrl._didEnter();
+    let deleteConfirm = this.alertCtrl.create({
+      title: 'Eliminar',
+      message: '¿Eliminar este Pictograma?',
+      buttons: [
+        {
+          text: 'Eliminar',
+          handler: () => {
+            this.schedulersService.deleteScheduler(id);
+          }
+        },
+        {
+          role: 'cancel',
+          text: 'Cancelar',
+          handler: () => {
+            /**/
+          }
+        }
+      ]
+    });
+
+    deleteConfirm.present();
+
   }
 
 /*
