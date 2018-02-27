@@ -8,12 +8,12 @@
 </ion-header>
 
 <ion-content>
-  <p [hidden]=!schedulersService.emptyList> No hay planificadores creados aún !</p>
+  <p [hidden]=!schedulersService.emptyList class="mensajeBienvenida">¡Bienvenido! Aún no hay planificadores creados... ¿Por qué no creas uno?</p>
   <ion-grid>
       <ion-row>
         <ion-col *ngFor="let scheduler of schedulersService.scheds" col-sm-12 col-md-4 col-lg-3>
           <ion-card>
-            <p class="schedulerTitle">{{scheduler.name}}</p>
+            <p class = "schedulerTitle">{{scheduler.name}}</p>
             <hr>
             <img src = {{Imagen}} (click)="openScheduler(scheduler)"/>
             <hr>
@@ -29,7 +29,7 @@
                 </button>
               </ion-col>
               <ion-col col-4>
-                <button ion-button full clear>
+                <button ion-button full clear (click)=deleteScheduler(scheduler.id)>
                   <ion-icon name="trash"></ion-icon>
                 </button>
               </ion-col>

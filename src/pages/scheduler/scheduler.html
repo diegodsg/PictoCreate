@@ -7,6 +7,11 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>{{currentScheduler.name}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openModal()">
+        <ion-icon name="create"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content>
@@ -25,3 +30,7 @@
     </ion-card-content>
   </ion-card>
 </ion-content>
+
+<ion-fab bottom right margin-bottom margin-right>
+  <button ion-fab color="secondary" (click)="loadPresentation()" ><ion-icon name="play"></ion-icon></button>
+</ion-fab>

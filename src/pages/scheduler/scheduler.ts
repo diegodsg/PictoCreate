@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
 import { Scheduler, Items, SchedulerList } from '../../models/data-model'
+import { PresentationPage } from '../../pages/presentation/presentation';
 
 /**
  * Generated class for the SchedulerPage page.
@@ -32,6 +33,12 @@ export class SchedulerPage {
     }else{
       this.hasImages = true;
     }
+  }
+
+  loadPresentation(){
+    this.navCtrl.push(PresentationPage,{
+      scheduler : this.currentScheduler
+    });
   }
 
 }

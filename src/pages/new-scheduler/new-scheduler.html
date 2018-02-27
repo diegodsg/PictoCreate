@@ -61,16 +61,15 @@
                                   <ion-input placeholder="Texto" text-center formControlName="text" type="text"></ion-input>
                               </ion-item>
                           </ion-list>
-                          <ion-fab fixed clear top right style="background-color: transparent;" >
-                            <button type="button" ion-fab mini (click)="deleteItem(i)" ><ion-icon name="close" ></ion-icon></button>
+                          <ion-fab fixed clear top right>
+                            <button  class="deletePicto" type="button" ion-fab mini color="secondary" (click)="deleteItem(i)" ><ion-icon name="close" ></ion-icon></button>
                           </ion-fab>
                       </ion-card-content>
                   </ion-card>
               </ion-col>
               <!--Add picto-->
-              <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center>
-                          <button ion-button color="primary" (click)="addItem()" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
-
+              <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center style="text-align: center">
+                  <button ion-button color="primary" (click)="addItem()" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
               </ion-col>
           </ion-row>
       </ion-grid>

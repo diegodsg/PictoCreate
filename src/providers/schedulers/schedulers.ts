@@ -72,6 +72,21 @@ export class SchedulersProvider {
         });
   }
 
+deleteScheduler(id){
+  this.storage.get(this.key).then((val) => {
+    let schedsAux = [];
+    for(var i=0; i<val.length; i++){
+      if(val[i].id != id){
+        schedsAux.push(val[i]);
+      }
+    }
+    this.scheds = schedsAux;
+    this.storage.set(this.key, schedsAux).then((val)=>{
+      console.log('item '+id+' deleted');
+    })
+  });
+}
+
 getScheduler(id){
   this.storage.get(this.key).then((val) => {
     for(var i=0; i<val.length; i++){

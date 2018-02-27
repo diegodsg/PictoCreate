@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ViewController } from 'ionic-angular';
 import { storage, initializeApp } from 'firebase';
 import { FIREBASE_CONFIG } from '../../app/firebase.config';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -20,7 +20,10 @@ export class HomePage {
 
   Imagen = 'assets/imgs/pictograma.jpg'
 
-  constructor(public navCtrl: NavController, public schedulersService: SchedulersProvider, private statusBar: StatusBar) {
+  constructor(public navCtrl: NavController,
+     public schedulersService: SchedulersProvider,
+    private statusBar: StatusBar,
+    private viewCtrl: ViewController) {
     initializeApp(FIREBASE_CONFIG);
     this.statusBar.backgroundColorByHexString('#2085c1');
   }
@@ -53,7 +56,10 @@ export class HomePage {
     this.navCtrl.push(NewSchedulerPage);
   }
 
-
+  deleteScheduler(id){
+    this.schedulersService.deleteScheduler(id);
+    //this.viewCtrl._didEnter();
+  }
 
 /*
 

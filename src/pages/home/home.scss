@@ -2,9 +2,10 @@ page-home {
 
 }
 
-#picto-card-row{
-  display: flex;
-  vertical-align: middle;
+.mensajeBienvenida{
+  padding:30px;
+  font-size: 2em !important;
+  font-weight: lighter !important;
 }
 
 .cardButtons{
@@ -17,5 +18,4 @@ page-home {
   font-size: 1.5em !important;
   padding-top: 10px;
   padding-left: 20px;
-
 }

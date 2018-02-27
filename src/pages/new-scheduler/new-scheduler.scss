@@ -1,3 +1,10 @@
 page-new-scheduler {
 
 }
+
+.deletePicto{
+  bottom: 20px;
+  left: 20px;
+  outline-color: map-get($colors, secondary) !important;
+  color: #000000;
+}
