@@ -40,7 +40,11 @@
     </ion-grid>
 
     <ion-fab bottom right margin-bottom margin-right>
-      <button ion-fab color="secondary" (click)="loadCreateScheduler()" ><ion-icon name="add"></ion-icon></button>
+      <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
+      <ion-fab-list side="top">
+        <button ion-fab (click)="loadCreateScheduler()"><ion-icon name="create"></ion-icon></button>
+        <button ion-fab (click)="loadCreateTemplate()"><ion-icon name="albums"></ion-icon></button>
+      </ion-fab-list>
     </ion-fab>
 
     <!--

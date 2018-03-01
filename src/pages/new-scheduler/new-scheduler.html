@@ -62,7 +62,7 @@
                               </ion-item>
                           </ion-list>
                           <ion-fab fixed clear top right>
-                            <button  class="deletePicto" type="button" ion-fab mini color="secondary" (click)="deleteItem(i)" ><ion-icon name="close" ></ion-icon></button>
+                            <button  class="deletePicto" type="button" ion-fab mini color="light" (click)="deleteItem(i)" ><ion-icon name="close" ></ion-icon></button>
                           </ion-fab>
                       </ion-card-content>
                   </ion-card>
@@ -74,11 +74,11 @@
           </ion-row>
       </ion-grid>
   </form>
-
+<!--
   <p>Valor Nombre: {{schedulerForm.value | json}}</p>
   <p>Estado Nombre: {{schedulerForm.status | json}}</p>
-
+-->
 </ion-content>
 <ion-fab fixed bottom right margin-bottom margin-right>
-  <button type="button" ion-fab color="secondary" (click)="savePicto()" ><ion-icon name="checkmark"></ion-icon></button>
+  <button type="button" ion-fab color="light" (click)="savePicto()" ><ion-icon name="checkmark"></ion-icon></button>
 </ion-fab>

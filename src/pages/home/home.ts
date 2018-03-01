@@ -68,13 +68,19 @@ export class HomePage {
           text: 'Exportar como PDF',
           icon: 'document',
           handler: () => {
-            console.log('exportar clicked');
+            console.log('export as PDF clicked');
           }
         },{
           text: 'Exportar como Imágenes',
           icon: 'photos',
           handler: () => {
-            console.log('Archive clicked');
+            console.log('export as img clicked');
+          }
+        },{
+          text: 'Enviar por correo como PDF',
+          icon: 'mail',
+          handler: () => {
+            console.log('Send via Mail clicked');
           }
         },{
           text: 'Cancel',

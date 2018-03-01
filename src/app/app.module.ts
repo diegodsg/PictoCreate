@@ -15,6 +15,7 @@ import { SchedulerPage } from '../pages/scheduler/scheduler';
 import { NewSchedulerPage } from '../pages/new-scheduler/new-scheduler'
 import { SearchPictogramPage } from '../pages/search-pictogram/search-pictogram'
 import { PresentationPage } from '../pages/presentation/presentation'
+import { SchedulerTemplatesPage } from '../pages/scheduler-templates/scheduler-templates'
 
 //Components
 //import { SchedulerDetailComponent } from '../components/scheduler-detail/scheduler-detail'
@@ -42,7 +43,8 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     SchedulerPage,
     NewSchedulerPage,
     SearchPictogramPage,
-    PresentationPage
+    PresentationPage,
+    SchedulerTemplatesPage
   ],
   imports: [
     BrowserModule,
@@ -61,7 +63,8 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     SchedulerPage,
     NewSchedulerPage,
     SearchPictogramPage,
-    PresentationPage
+    PresentationPage,
+    SchedulerTemplatesPage
   ],
   providers: [
     StatusBar,
