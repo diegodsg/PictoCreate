@@ -26,6 +26,9 @@ import { SchedulersProvider } from '../../providers/schedulers/schedulers'
   templateUrl: 'new-scheduler.html',
 })
 export class NewSchedulerPage implements OnChanges {
+
+  edit: boolean = false;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private fb: FormBuilder,
@@ -33,8 +36,17 @@ export class NewSchedulerPage implements OnChanges {
               public schedulerService: SchedulersProvider,
               //private screenshot: Screenshot,
               //private file: File,
-            ) {
-    this.createForm();
+            ){
+    this.edit = this.navParams.get("isEdit");
+    if (this.edit == true){
+      this.scheduler = this.navParams.get("scheduler");
+      this.createForm();
+      this.setForm(this.scheduler);
+
+    }
+    else{
+      this.createForm();
+    }
   }
 
   @Input() scheduler: Scheduler;
@@ -77,6 +89,10 @@ export class NewSchedulerPage implements OnChanges {
     this.items.removeAt(index);
   }
 
+  setForm(scheduler: Scheduler){
+    this.schedulerForm.patchValue({name: scheduler.name, type: scheduler.type});
+    this.setItems(this.scheduler.items)
+  }
 
   ngOnChanges(){
     this.schedulerForm.reset({

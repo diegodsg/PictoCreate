@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { SchedulersProvider } from '../../providers/schedulers/schedulers'
 /**
  * Generated class for the SchedulerTemplatesPage page.
  *
@@ -15,11 +15,21 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SchedulerTemplatesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public viewCtrl: ViewController,
+              public schedulersService: SchedulersProvider,) {
   }
 
+  Image = 'assets/imgs/Plantilla_1.PNG'
+
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SchedulerTemplatesPage');
+    //this.schedulersService.getScheduler();
+  }
+
+  selectTemplate(){
+    //this.viewCtrl.dismiss(scheduler);
+    this.viewCtrl.dismiss('Plantilla seleccionada');
   }
 
 }

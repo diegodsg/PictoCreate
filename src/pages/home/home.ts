@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, ViewController, AlertController, ActionSheetController } from 'ionic-angular';
-import { storage, initializeApp } from 'firebase';
-import { FIREBASE_CONFIG } from '../../app/firebase.config';
+import { NavController, ViewController, AlertController, ActionSheetController,  NavParams, ModalController, Modal } from 'ionic-angular';
+//import { storage, initializeApp } from 'firebase';
+//import { FIREBASE_CONFIG } from '../../app/firebase.config';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerPage } from '../../pages/scheduler/scheduler';
 import { NewSchedulerPage } from '../../pages/new-scheduler/new-scheduler';
+import { SchedulerTemplatesPage } from '../../pages/scheduler-templates/scheduler-templates'
+
 import { Scheduler, Items } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
 
@@ -25,9 +27,11 @@ export class HomePage {
               private statusBar: StatusBar,
               private viewCtrl: ViewController,
               private alertCtrl: AlertController,
-              public actionSheetCtrl: ActionSheetController
+              public actionSheetCtrl: ActionSheetController,
+              public navParams: NavParams,
+              public modalCtrl: ModalController,
               ){
-    initializeApp(FIREBASE_CONFIG);
+    //initializeApp(FIREBASE_CONFIG);
     this.statusBar.backgroundColorByHexString('#2085c1');
   }
 
@@ -45,7 +49,6 @@ export class HomePage {
     console.log(this.schedulersService.scheds);
 
   }
-
 
   openScheduler(scheduler : Scheduler){
     //((console.log('card '+this.schedulersService.scheds.find(id)+' clicked');
@@ -119,8 +122,26 @@ export class HomePage {
 
   }
 
-/*
+  editScheduler(scheduler: Scheduler){
+    this.navCtrl.push(NewSchedulerPage,{
+      isEdit : true,
+      scheduler : scheduler
+    });
+  }
 
+  loadTemplatesModal(){
+    let modal: Modal = this.modalCtrl.create(SchedulerTemplatesPage);
+    modal.present();
+    modal.onDidDismiss((data)=>{
+      console.log(data);
+      /*
+      if(data != null){
+        editScheduler(data);
+      }
+      */
+    });
+  }
+/*
   async takePhoto() {
     //definir opciones de camara
     try {
