@@ -1,0 +1,105 @@
+<!--
+  Generated template for the SchedulerEditorPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>schedulerEditor</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <form [formGroup]="schedulerForm">
+    <!-- Name & Type -->
+    <ion-card>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col col-sm-12 col-md-4 col-lg-6>
+                        <ion-list padding-left>
+                            <ion-item>
+                                <ion-input placeholder="Nombre" formControlName="name" type="text"></ion-input>
+                            </ion-item>
+                        </ion-list>
+                    </ion-col>
+                    <ion-col col-sm-12 col-md-8 col-lg-6>
+                          <ion-row>
+                            <ion-col col-sm-6 col-lg-6>
+                              <ion-item>
+                                <ion-label>Imagen</ion-label>
+                                <ion-checkbox formControlName="hasImage"></ion-checkbox>
+                              </ion-item>
+                            </ion-col>
+                            <ion-col col-sm-6 col-lg-6>
+                              <ion-item>
+                                <ion-label>Texto</ion-label>
+                                <ion-checkbox formControlName="hasText"></ion-checkbox>
+                              </ion-item>
+                            </ion-col>
+                          </ion-row>
+                  </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- Categories -->
+    <div formArrayName="categories">
+      <ion-card *ngFor="let cat of schedulerForm.get('categories').controls; let i=index" class="category">
+        <ion-card-content [formGroupName]="i" >
+          <ion-input placeholder="Nombre de la Categoría" formControlName="category"></ion-input>
+          <ion-fab fixed top right>
+            <button class="deleteCategory" type="button" (click)="deleteCategory(i)" ><ion-icon name="close" ></ion-icon></button>
+          </ion-fab>
+
+          <!-- Items -->
+          <div formArrayName="items">
+            <div *ngFor="let item of cat.get('items').controls; let j=index">
+              <div [formGroupName]="j">
+                <label>Item Name:</label>
+                <input formControlName="itemText" /><span><button (click)="deleteItem(cat.controls.items, j)">Delete Item</button></span>
+              </div>
+            </div>
+            <button ion-button (click)="addNewItem(cat.controls.items)">Add new Item</button>
+          </div>
+
+          <ion-row formArrayName="items">
+            <ion-col col-sm-12 col-md-3 col-lg-2 *ngFor="let item of cat.get('items').controls; let j=index" [formGroupName]="i">
+              <ion-card>
+                <ion-card-content>
+                    <img src="{{schedulerForm.get('items').value[i].image}}" [hidden]=textOnly class="picto_image" (click)="pictogramSearch(i)" />
+                    <ion-list no-lines>
+                        <ion-item [hidden]=true>
+                            <ion-label floating>Image</ion-label>
+                            <ion-input formControlName="image" type="text"></ion-input>
+                        </ion-item>
+                        <ion-item style="text-align:center">
+                            <ion-input placeholder="Texto" text-center formControlName="text" type="text"></ion-input>
+                        </ion-item>
+                    </ion-list>
+                    <ion-fab fixed clear top right>
+                      <button  class="deletePicto" type="button" ion-fab mini color="light" (click)="deleteItem(i)" ><ion-icon name="close" ></ion-icon></button>
+                    </ion-fab>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <!--Add picto-->
+            <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center style="text-align: center">
+                <button ion-button color="primary" (click)="addItem()" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
+            </ion-col>
+          </ion-row>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </form>
+  <button ion-button (click)="addNewCategory()">Add new Category</button><br><br>
+
+  <pre>{{schedulerForm.value | json}}</pre>
+
+</ion-content>

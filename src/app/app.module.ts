@@ -1,35 +1,38 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { MyApp } from './app.component';
+import { BrowserModule } from '@angular/platform-browser'
+import { ErrorHandler, NgModule } from '@angular/core'
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular'
+import { MyApp } from './app.component'
 
-import {HttpClientModule} from '@angular/common/http';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http'
+import {HttpModule} from '@angular/http'
 
 
 //Pages
-import { HomePage } from '../pages/home/home';
-import { AboutPage } from '../pages/about/about';
-import { ListPage } from '../pages/list/list';
-import { SchedulerPage } from '../pages/scheduler/scheduler';
+import { HomePage } from '../pages/home/home'
+import { AboutPage } from '../pages/about/about'
+import { ListPage } from '../pages/list/list'
+import { SchedulerPage } from '../pages/scheduler/scheduler'
 import { NewSchedulerPage } from '../pages/new-scheduler/new-scheduler'
 import { SearchPictogramPage } from '../pages/search-pictogram/search-pictogram'
 import { PresentationPage } from '../pages/presentation/presentation'
 import { SchedulerTemplatesPage } from '../pages/scheduler-templates/scheduler-templates'
+import { SchedulerEditorPage } from '../pages/scheduler-editor/scheduler-editor'
 
 //Components
 //import { SchedulerDetailComponent } from '../components/scheduler-detail/scheduler-detail'
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { Camera } from '@ionic-native/camera'
-import { IonicStorageModule } from '@ionic/storage';
+import { StatusBar } from '@ionic-native/status-bar'
+import { SplashScreen } from '@ionic-native/splash-screen'
+import { IonicStorageModule } from '@ionic/storage'
 import { ReactiveFormsModule } from '@angular/forms'
-//import { File } from '@ionic-native/file';
 //import { Scheduler, Items } from '../models/data-model'
 
+import { File } from '@ionic-native/file'
+import { FilePath } from '@ionic-native/file-path'
+import { Camera } from '@ionic-native/camera'
+
 //providers
-import { SchedulersProvider } from '../providers/schedulers/schedulers';
+import { SchedulersProvider } from '../providers/schedulers/schedulers'
 //import { Screenshot } from '@ionic-native/screenshot'
 
 
@@ -44,7 +47,8 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     NewSchedulerPage,
     SearchPictogramPage,
     PresentationPage,
-    SchedulerTemplatesPage
+    SchedulerTemplatesPage,
+    SchedulerEditorPage
   ],
   imports: [
     BrowserModule,
@@ -64,12 +68,16 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers';
     NewSchedulerPage,
     SearchPictogramPage,
     PresentationPage,
-    SchedulerTemplatesPage
+    SchedulerTemplatesPage,
+    SchedulerEditorPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     Camera,
+    File,
+    Camera,
+    FilePath,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SchedulersProvider,
     HttpClientModule,

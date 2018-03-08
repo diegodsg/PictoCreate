@@ -7,6 +7,7 @@ import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerPage } from '../../pages/scheduler/scheduler';
 import { NewSchedulerPage } from '../../pages/new-scheduler/new-scheduler';
 import { SchedulerTemplatesPage } from '../../pages/scheduler-templates/scheduler-templates'
+import { SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor'
 
 import { Scheduler, Items } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
@@ -59,7 +60,8 @@ export class HomePage {
   }
 
   loadCreateScheduler(){
-    this.navCtrl.push(NewSchedulerPage);
+    //this.navCtrl.push(NewSchedulerPage);
+    this.navCtrl.push(SchedulerEditorPage);
   }
 
   shareScheduler(id){

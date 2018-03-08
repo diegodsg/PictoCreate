@@ -1,0 +1,35 @@
+page-scheduler-editor {
+  /*ion-content {
+    form {
+      div {
+        ion-card {
+          ion-card-content{
+            ion-fab{
+              button{
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }*/
+}
+
+
+.category{
+  position: relative;
+}
+
+.deleteCategory{
+  background-color: Transparent !important;
+  height: 35px;
+  width: 35px;
+  box-shadow: none !important;
+  color: rgba(#000000, 0.56);
+  font-size: 1.5em !important;
+}
+
+.deleteCategory:hover{
+  color: #d01e1e;
+}

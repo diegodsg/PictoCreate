@@ -1,17 +1,22 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core'
 
 import { IonicPage, NavController, NavParams,
          ViewController, Platform,
-         LoadingController, Searchbar  } from 'ionic-angular';
+         LoadingController, Searchbar,
+         ActionSheetController, ToastController, Loading } from 'ionic-angular'
 
-import { Http } from '@angular/http';
+import { File } from '@ionic-native/file'
+import { FilePath } from '@ionic-native/file-path'
+import { Camera } from '@ionic-native/camera'
+
+import { Http } from '@angular/http'
 //import { HttpClientModule } from '@angular/common/http';
 //import { HttpModule } from '@angular/http';
 
-import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage'
 import 'rxjs/add/operator/map' //add aditional properties of an Observable
 
-
+declare var cordova: any;
 /**
  * Generated class for the SearchPictogramPage page.
  *
@@ -42,13 +47,21 @@ export class SearchPictogramPage {
   cnt: number = 0;
   batch: number = 15;
 
+  lastImage: string = null;
+  loading: Loading;
+
   constructor(public navCtrl: NavController,
               public params: NavParams,
               public platform: Platform,
               public http: Http,
               public storage: Storage,
-              public loadingCtrl: LoadingController,
-              public viewCtrl: ViewController) {
+              public viewCtrl: ViewController,
+              private camera: Camera,
+              private file: File,
+              private filePath: FilePath,
+              public actionSheetCtrl: ActionSheetController,
+              public toastCtrl: ToastController,
+              public loadingCtrl: LoadingController) {
 
     var path = "";
 		 	if(this.platform.is('android') && !this.platform.is('mobileweb')){
@@ -77,7 +90,6 @@ export class SearchPictogramPage {
 		});
 
   }
-
 
   	 decode(uri){
   		 let d_uri = decodeURI(uri);
@@ -143,7 +155,6 @@ export class SearchPictogramPage {
 
   		}
 
-
   			let max =  this.total > this.batch ? this.batch : this.total;
   			for(let j = 0; j < max ; j++){
   				this.results.push(this.temp[j]);
@@ -187,5 +198,99 @@ export class SearchPictogramPage {
     }
     this.viewCtrl.dismiss(data);
   }
+
+  public presentActionSheet(){
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Select Image Source',
+      buttons: [
+        {
+          text: 'Load from Library',
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+        },
+        {
+          text: 'Use Camera',
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.CAMERA);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+
+public takePicture(sourceType) {
+  // Create options for the Camera Dialog
+  var options = {
+    quality: 100,
+    sourceType: sourceType,
+    saveToPhotoAlbum: false,
+    correctOrientation: true
+  };
+
+  // Get the data of an image
+  this.camera.getPicture(options).then((imagePath) => {
+    // Special handling for Android library
+    if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+      this.filePath.resolveNativePath(imagePath)
+        .then(filePath => {
+          let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+          let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+          this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+          console.log(correctPath+'/'+currentName);
+        });
+    } else {
+      var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+      var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+      this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+      console.log(correctPath+'/'+currentName);
+    }
+  }, (err) => {
+    this.presentToast('Error while selecting image.');
+  });
+}
+
+// Create a new name for the image
+private createFileName() {
+  var d = new Date(),
+  n = d.getTime(),
+  newFileName =  n + ".jpg";
+  return newFileName;
+}
+
+// Copy the image to a local folder
+private copyFileToLocalDir(namePath, currentName, newFileName) {
+  this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+    this.lastImage = newFileName;
+  }, error => {
+    this.presentToast('Error while storing file.');
+  });
+}
+
+private presentToast(text) {
+  let toast = this.toastCtrl.create({
+    message: text,
+    duration: 3000,
+    position: 'top'
+  });
+  toast.present();
+}
+
+// Always get the accurate path to your apps folder
+public pathForImage(img){
+  if (img === null) {
+    return '';
+  } else {
+    return cordova.file.dataDirectory + img;
+  }
+}
+
+
 
 }
