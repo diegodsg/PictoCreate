@@ -21,7 +21,7 @@ import { SchedulersProvider } from '../../providers/schedulers/schedulers'
 export class SchedulerEditorPage {
 
   schedulerForm: FormGroup;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public modalCtrl: ModalController) {
     this.schedulerForm = this.fb.group({
     // you can also set initial formgroup inside if you like
     name: '',
@@ -51,13 +51,25 @@ export class SchedulerEditorPage {
     control.push(
       this.fb.group({
         itemText: [''],
-        //itemImage: [''],
+        itemImage: ['assets/imgs/placeholder_pictogram.png'],
         //itemFav:[''],
     }))
   }
 
   deleteItem(control, index) {
     control.removeAt(index)
+  }
+
+  pictogramSearch(i, j){
+    let modal: Modal = this.modalCtrl.create(SearchPictogramPage);
+    modal.present();
+    modal.onDidDismiss((data)=>{
+      console.log(data);
+      if(data != null){
+        /*patchValue({image: data.url})*/
+        this.schedulerForm.get('categories').controls[i].get('items').controls[j].patchValue({itemImage: data.url});
+      }
+    })
   }
 
 }

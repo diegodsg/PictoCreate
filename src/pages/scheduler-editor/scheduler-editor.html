@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>schedulerEditor</ion-title>
+    <ion-title>Crear Planificador</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -58,41 +58,33 @@
           </ion-fab>
 
           <!-- Items -->
-          <div formArrayName="items">
-            <div *ngFor="let item of cat.get('items').controls; let j=index">
-              <div [formGroupName]="j">
-                <label>Item Name:</label>
-                <input formControlName="itemText" /><span><button (click)="deleteItem(cat.controls.items, j)">Delete Item</button></span>
-              </div>
-            </div>
-            <button ion-button (click)="addNewItem(cat.controls.items)">Add new Item</button>
-          </div>
-
           <ion-row formArrayName="items">
-            <ion-col col-sm-12 col-md-3 col-lg-2 *ngFor="let item of cat.get('items').controls; let j=index" [formGroupName]="i">
-              <ion-card>
+            <ion-col col-sm-12 col-md-3 col-lg-2 *ngFor="let item of cat.get('items').controls; let j=index">
+              <ion-card [formGroupName]="j">
                 <ion-card-content>
-                    <img src="{{schedulerForm.get('items').value[i].image}}" [hidden]=textOnly class="picto_image" (click)="pictogramSearch(i)" />
-                    <ion-list no-lines>
+                    <img src="{{item.controls.itemImage.value}}" [hidden]=textOnly class="picto_image" (click)="pictogramSearch(i, j)" />
+                    <ion-list>
                         <ion-item [hidden]=true>
                             <ion-label floating>Image</ion-label>
-                            <ion-input formControlName="image" type="text"></ion-input>
+                            <ion-input formControlName="itemImage" type="text"></ion-input>
                         </ion-item>
                         <ion-item style="text-align:center">
-                            <ion-input placeholder="Texto" text-center formControlName="text" type="text"></ion-input>
+                            <ion-input placeholder="Texto" text-center formControlName="itemText" type="text"></ion-input>
                         </ion-item>
                     </ion-list>
                     <ion-fab fixed clear top right>
-                      <button  class="deletePicto" type="button" ion-fab mini color="light" (click)="deleteItem(i)" ><ion-icon name="close" ></ion-icon></button>
+                      <button  class="deletePicto" type="button" ion-fab mini color="light" (click)="deleteItem(cat.controls.items, j)" ><ion-icon name="close" ></ion-icon></button>
                     </ion-fab>
                 </ion-card-content>
               </ion-card>
             </ion-col>
             <!--Add picto-->
             <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center style="text-align: center">
-                <button ion-button color="primary" (click)="addItem()" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
+                <button ion-button color="primary" (click)="addNewItem(cat.controls.items)" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
             </ion-col>
           </ion-row>
+
+
 
         </ion-card-content>
       </ion-card>
