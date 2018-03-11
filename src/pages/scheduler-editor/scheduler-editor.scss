@@ -22,14 +22,15 @@ page-scheduler-editor {
 }
 
 .deleteCategory{
-  background-color: Transparent !important;
+
+  box-shadow: none !important;
   height: 35px;
   width: 35px;
-  box-shadow: none !important;
-  color: rgba(#000000, 0.56);
+  background-color: #FFFFFF;
+  color: #d01e1e;
   font-size: 1.5em !important;
 }
 
-.deleteCategory:hover{
-  color: #d01e1e;
+.categoryTitle{
+  font-size: 1.5em !important;
 }

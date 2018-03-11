@@ -32,13 +32,13 @@
                             <ion-col col-sm-6 col-lg-6>
                               <ion-item>
                                 <ion-label>Imagen</ion-label>
-                                <ion-checkbox formControlName="hasImage"></ion-checkbox>
+                                <ion-checkbox formControlName="hasImage" (click)="select()" disabled={{disableImage}}></ion-checkbox>
                               </ion-item>
                             </ion-col>
                             <ion-col col-sm-6 col-lg-6>
                               <ion-item>
                                 <ion-label>Texto</ion-label>
-                                <ion-checkbox formControlName="hasText"></ion-checkbox>
+                                <ion-checkbox formControlName="hasText" (click)="select()" disabled={{disableText}}></ion-checkbox>
                               </ion-item>
                             </ion-col>
                           </ion-row>
@@ -50,11 +50,21 @@
 
     <!-- Categories -->
     <div formArrayName="categories">
-      <ion-card *ngFor="let cat of schedulerForm.get('categories').controls; let i=index" class="category">
-        <ion-card-content [formGroupName]="i" >
-          <ion-input placeholder="Nombre de la Categoría" formControlName="category"></ion-input>
+      <ion-card *ngFor="let cat of schedulerForm.get('categories').controls; let i=index" class="category" [style.background-color]="cat.get('color').value">
+        <ion-card-content [formGroupName]="i">
+          <ion-input placeholder="Nombre de la Categoría" formControlName="category" class="categoryTitle" [style.color]="cat.get('textColor').value"></ion-input>
+
+          <ion-fab fixed bottom right>
+            <button ion-fab mini type="button" class="deleteCategory"><img src="assets/imgs/colors.png"/></button>
+            <ion-fab-list side="left">
+              <div *ngFor="let buttonColor of colors.color; let k = index">
+                <button ion-fab (click)="selectCatColor(i, k)" [style.background-color]="buttonColor.val"></button>
+              </div>
+            </ion-fab-list>
+          </ion-fab>
+
           <ion-fab fixed top right>
-            <button class="deleteCategory" type="button" (click)="deleteCategory(i)" ><ion-icon name="close" ></ion-icon></button>
+            <button ion-fab mini class="deleteCategory" type="button" (click)="deleteCategory(i)" ><ion-icon name="close" ></ion-icon></button>
           </ion-fab>
 
           <!-- Items -->
@@ -62,13 +72,13 @@
             <ion-col col-sm-12 col-md-3 col-lg-2 *ngFor="let item of cat.get('items').controls; let j=index">
               <ion-card [formGroupName]="j">
                 <ion-card-content>
-                    <img src="{{item.controls.itemImage.value}}" [hidden]=textOnly class="picto_image" (click)="pictogramSearch(i, j)" />
+                    <img src="{{item.controls.itemImage.value}}" [hidden]="!schedulerForm.get('hasImage').value" class="picto_image" (click)="pictogramSearch(i, j)" />
                     <ion-list>
                         <ion-item [hidden]=true>
                             <ion-label floating>Image</ion-label>
                             <ion-input formControlName="itemImage" type="text"></ion-input>
                         </ion-item>
-                        <ion-item style="text-align:center">
+                        <ion-item style="text-align:center" [hidden]="!schedulerForm.get('hasText').value">
                             <ion-input placeholder="Texto" text-center formControlName="itemText" type="text"></ion-input>
                         </ion-item>
                     </ion-list>
@@ -83,7 +93,6 @@
                 <button ion-button color="primary" (click)="addNewItem(cat.controls.items)" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
             </ion-col>
           </ion-row>
-
 
 
         </ion-card-content>

@@ -19,7 +19,7 @@ import { SchedulerTemplatesPage } from '../pages/scheduler-templates/scheduler-t
 import { SchedulerEditorPage } from '../pages/scheduler-editor/scheduler-editor'
 
 //Components
-//import { SchedulerDetailComponent } from '../components/scheduler-detail/scheduler-detail'
+import { ColorPickerComponent } from '../components/color-picker/color-picker'
 
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
@@ -35,8 +35,6 @@ import { Camera } from '@ionic-native/camera'
 import { SchedulersProvider } from '../providers/schedulers/schedulers'
 //import { Screenshot } from '@ionic-native/screenshot'
 
-
-
 @NgModule({
   declarations: [
     MyApp,
@@ -48,7 +46,9 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers'
     SearchPictogramPage,
     PresentationPage,
     SchedulerTemplatesPage,
-    SchedulerEditorPage
+    SchedulerEditorPage,
+    ColorPickerComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -69,7 +69,9 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers'
     SearchPictogramPage,
     PresentationPage,
     SchedulerTemplatesPage,
-    SchedulerEditorPage
+    SchedulerEditorPage,
+    ColorPickerComponent,
+
   ],
   providers: [
     StatusBar,
