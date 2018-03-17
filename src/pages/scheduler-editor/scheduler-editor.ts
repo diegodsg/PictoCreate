@@ -79,12 +79,23 @@ export class SchedulerEditorPage {
       this.fb.group({
         itemText: [''],
         itemImage: ['assets/imgs/placeholder_pictogram.png'],
-        //itemFav:[''],
+        itemFav:[false],
     }))
   }
 
   deleteItem(control, index) {
     control.removeAt(index)
+  }
+
+  favItem(control, index) {
+
+    if(control.controls[index].get("itemFav").value==false){
+      control.controls[index].patchValue({itemFav: true});
+    }
+    else{
+      control.controls[index].patchValue({itemFav: false});
+    }
+    console.log(control.controls[index].get("itemFav").value);
   }
 
   get categories(): FormArray {

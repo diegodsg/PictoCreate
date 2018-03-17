@@ -22,12 +22,29 @@ page-scheduler-editor {
 }
 
 .deleteCategory{
-
   box-shadow: none !important;
   height: 35px;
   width: 35px;
   background-color: #FFFFFF;
   color: #d01e1e;
+  font-size: 1.5em !important;
+}
+
+.favPicto{
+  left: 0px;
+  top: 0px;
+  box-shadow: none !important;
+  background-color: #FFFFFF;
+  color: #b7d01e;
+  font-size: 1.5em !important;
+}
+
+.deletePicto{
+  right: 0px;
+  top: 0px;
+  box-shadow: none !important;
+  background-color: #FFFFFF;
+  color: #222222;
   font-size: 1.5em !important;
 }
 
