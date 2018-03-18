@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { ErrorHandler, NgModule } from '@angular/core'
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular'
+import { IonicApp, IonicErrorHandler, IonicModule, FabContainer } from 'ionic-angular'
 import { MyApp } from './app.component'
 
 import {HttpClientModule} from '@angular/common/http'
@@ -12,14 +12,12 @@ import { HomePage } from '../pages/home/home'
 import { AboutPage } from '../pages/about/about'
 import { ListPage } from '../pages/list/list'
 import { SchedulerPage } from '../pages/scheduler/scheduler'
-import { NewSchedulerPage } from '../pages/new-scheduler/new-scheduler'
 import { SearchPictogramPage } from '../pages/search-pictogram/search-pictogram'
 import { PresentationPage } from '../pages/presentation/presentation'
 import { SchedulerTemplatesPage } from '../pages/scheduler-templates/scheduler-templates'
 import { SchedulerEditorPage } from '../pages/scheduler-editor/scheduler-editor'
 
 //Components
-import { ColorPickerComponent } from '../components/color-picker/color-picker'
 
 import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
@@ -42,12 +40,11 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers'
     AboutPage,
     ListPage,
     SchedulerPage,
-    NewSchedulerPage,
     SearchPictogramPage,
     PresentationPage,
     SchedulerTemplatesPage,
     SchedulerEditorPage,
-    ColorPickerComponent,
+
 
   ],
   imports: [
@@ -65,12 +62,10 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers'
     AboutPage,
     ListPage,
     SchedulerPage,
-    NewSchedulerPage,
     SearchPictogramPage,
     PresentationPage,
     SchedulerTemplatesPage,
     SchedulerEditorPage,
-    ColorPickerComponent,
 
   ],
   providers: [
@@ -80,6 +75,7 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers'
     File,
     Camera,
     FilePath,
+    FabContainer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SchedulersProvider,
     HttpClientModule,

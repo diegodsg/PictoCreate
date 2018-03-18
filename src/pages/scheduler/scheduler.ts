@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
-import { Scheduler, Items, SchedulerList } from '../../models/data-model'
+import { Scheduler, Item, Category} from '../../models/data-model'
 import { PresentationPage } from '../../pages/presentation/presentation';
 
 /**
@@ -26,6 +26,7 @@ export class SchedulerPage {
     //this.schedulerService.getScheduler(this.schedulerId);
   }
 
+/*
   ionViewDidLoad() {
     console.log(this.currentScheduler);
     if(this.currentScheduler.type == 'isText'){
@@ -33,7 +34,7 @@ export class SchedulerPage {
     }else{
       this.hasImages = true;
     }
-  }
+  }*/
 
   loadPresentation(){
     this.navCtrl.push(PresentationPage,{

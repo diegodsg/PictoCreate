@@ -25,29 +25,61 @@ page-scheduler-editor {
   box-shadow: none !important;
   height: 35px;
   width: 35px;
-  background-color: #FFFFFF;
+  background-color: transparent !important;
+  font-size: 1.5em !important;
+}
+
+.pictoButtonRow{
+  height: 30px;
+}
+
+.favPicto{
+  padding: 20px;
+  box-shadow: none !important;
+  background-color: transparent !important;
   color: #d01e1e;
   font-size: 1.5em !important;
 }
 
-.favPicto{
-  left: 0px;
-  top: 0px;
+.unfavPicto{
+  padding: 20px;
   box-shadow: none !important;
-  background-color: #FFFFFF;
-  color: #b7d01e;
+  background-color: transparent !important;
+  color: #999999;
   font-size: 1.5em !important;
 }
 
 .deletePicto{
-  right: 0px;
-  top: 0px;
+  padding: 20px;
   box-shadow: none !important;
-  background-color: #FFFFFF;
-  color: #222222;
+  background-color: transparent !important;
+  color: #999999;
   font-size: 1.5em !important;
 }
 
 .categoryTitle{
   font-size: 1.5em !important;
+}
+
+.openFab{
+  box-shadow: none !important;
+  height: 35px;
+  width: 35px;
+  background-color: #FFFFFF;
+  font-size: 1.5em !important;
+}
+
+.backdropFab{
+  background-color: #FFFFFF;
+  color: #000000
+}
+
+.labelRange{
+  text-align: center;
+  vertical-align: middle;
+  margin: auto;
+}
+
+.buttonAddCategory{
+  margin: 1.5em;
 }

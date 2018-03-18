@@ -20,14 +20,28 @@
         <ion-card-content>
             <ion-grid>
                 <ion-row>
-                    <ion-col col-sm-12 col-md-4 col-lg-6>
+                    <ion-col col-sm-12 col-md-4 col-lg-8>
                         <ion-list padding-left>
                             <ion-item>
                                 <ion-input placeholder="Nombre" formControlName="name" type="text"></ion-input>
                             </ion-item>
                         </ion-list>
                     </ion-col>
-                    <ion-col col-sm-12 col-md-8 col-lg-6>
+                    <ion-col col-sm-12 col-md-8 col-lg-4>
+                      <!--
+                      <ion-row>
+                        <ion-col col-2 class="labelRange">
+                          <ion-icon name="image"></ion-icon>
+                        </ion-col>
+                        <ion-col col-8>
+                          <ion-range min="0" max="2" step="1" snaps="true"  formControlName="hasImage"></ion-range>
+                        </ion-col>
+                        <ion-col col-2 class="labelRange">
+                          <ion-icon name="create"></ion-icon>
+                        </ion-col>
+                      </ion-row>
+                      -->
+
                           <ion-row>
                             <ion-col col-sm-6 col-lg-6>
                               <ion-item>
@@ -42,6 +56,7 @@
                               </ion-item>
                             </ion-col>
                           </ion-row>
+
                   </ion-col>
                 </ion-row>
             </ion-grid>
@@ -54,33 +69,53 @@
         <ion-card-content [formGroupName]="i">
           <ion-input placeholder="Nombre de la Categoría" formControlName="category" class="categoryTitle" [style.color]="cat.get('textColor').value"></ion-input>
 
-          <ion-fab fixed bottom right>
-            <button ion-fab mini type="button" class="deleteCategory"><img src="assets/imgs/colors.png"/></button>
-            <ion-fab-list side="left">
+          <ion-fab fixed bottom right #fab>
+            <button ion-fab mini type="button" class="openFab"  [hidden]="!toggle[i]" (click)="toggle[i] = false"><img src="assets/imgs/colors.png"/></button>
+            <ion-fab-list side="left" >
               <div *ngFor="let buttonColor of colors.color; let k = index">
-                <button ion-fab (click)="selectCatColor(i, k)" [style.background-color]="buttonColor.val"></button>
+                <button ion-fab (click)="selectCatColor(i, k, fab)" [style.background-color]="buttonColor.val"></button>
               </div>
             </ion-fab-list>
+
+            <button ion-fab (click)="toggle[i]=true; fab.close()" class="backdropFab" [hidden]="toggle[i]"><ion-icon name="ios-arrow-forward"></ion-icon></button>
+
           </ion-fab>
 
+
           <ion-fab fixed top right>
-            <button ion-fab mini class="deleteCategory" type="button" (click)="deleteCategory(i)" ><ion-icon name="close" ></ion-icon></button>
+            <button ion-fab mini class="deleteCategory" type="button" (click)="deleteCategory(i)"><ion-icon name="close" [style.color]="cat.get('textColor').value"></ion-icon></button>
           </ion-fab>
 
           <!-- Items -->
           <ion-row formArrayName="items">
             <ion-col col-sm-12 col-md-3 col-lg-2 *ngFor="let item of cat.get('items').controls; let j=index">
               <ion-card [formGroupName]="j">
+                <!--Item-Card-->
                 <ion-card-content>
-                  <button top left class="favPicto"    type="button" (click)="favItem(cat.controls.items, j)"><ion-icon name="star" ></ion-icon></button>
-                  <button top right class="deletePicto" type="button" (click)="deleteItem(cat.controls.items, j)"><ion-icon name="close" ></ion-icon></button>
+                  <!--Top Buttons-->
+                  <div class="pictoButtonRow">
+                    <ion-fab top left [hidden]="!cat.controls.items.controls[j].get('itemFav').value">
+                      <button ion-fab class="favPicto"    type="button" (click)="favItem(cat.controls.items, j)"><ion-icon name="bookmark" ></ion-icon></button>
+                    </ion-fab>
+
+                    <ion-fab top left [hidden]="cat.controls.items.controls[j].get('itemFav').value">
+                      <button ion-fab class="unfavPicto"    type="button" (click)="favItem(cat.controls.items, j)"><ion-icon name="bookmark" ></ion-icon></button>
+                    </ion-fab>
+
+                    <ion-fab top right>
+                      <button class="deletePicto" type="button" (click)="deleteItem(cat.controls.items, j)"><ion-icon name="close" ></ion-icon></button>
+                    </ion-fab>
+                  </div>
+                  <!--Image-->
 
                   <img src="{{item.controls.itemImage.value}}" [hidden]="!schedulerForm.get('hasImage').value" class="picto_image" (click)="pictogramSearch(i, j)" />
+
                   <ion-list>
                       <ion-item [hidden]=true>
                           <ion-label floating>Image</ion-label>
                           <ion-input formControlName="itemImage" type="text"></ion-input>
                       </ion-item>
+                      <!--Text Input-->
                       <ion-item style="text-align:center" [hidden]="!schedulerForm.get('hasText').value">
                           <ion-input placeholder="Texto" text-center formControlName="itemText" type="text"></ion-input>
                       </ion-item>
@@ -90,17 +125,19 @@
             </ion-col>
             <!--Add picto-->
             <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center style="text-align: center">
-                <button ion-button color="primary" (click)="addNewItem(cat.controls.items)" type="button"><ion-icon name="add"></ion-icon>AÑADIR ELEMENTO</button>
+                <button ion-button color="primary" (click)="addNewItem(cat.controls.items);" type="button"><ion-icon name="add"></ion-icon>AÑADIR picto</button>
             </ion-col>
           </ion-row>
-
-
         </ion-card-content>
       </ion-card>
     </div>
   </form>
-  <button ion-button (click)="addNewCategory()">Add new Category</button><br><br>
+  <button ion-button (click)="addNewCategory()" class="buttonAddCategory" >Añadir grupo</button><br><br>
 
   <pre>{{schedulerForm.value | json}}</pre>
 
 </ion-content>
+
+<ion-fab fixed bottom right margin-bottom margin-right>
+  <button type="button" ion-fab color="light" (click)="savePicto()" ><ion-icon name="checkmark"></ion-icon></button>
+</ion-fab>

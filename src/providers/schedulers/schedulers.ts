@@ -1,7 +1,7 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Scheduler, Items, SchedulerList } from '../../models/data-model';
+import { Scheduler, Item, Category } from '../../models/data-model';
 
 /*
   Generated class for the SchedulersProvider provider.
@@ -95,6 +95,10 @@ getScheduler(id){
       }
     }
   });
+}
+
+updateScheduler(id){
+
 }
 
 }

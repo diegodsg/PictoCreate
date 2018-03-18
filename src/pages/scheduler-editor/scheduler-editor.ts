@@ -1,12 +1,11 @@
-import { IonicPage, NavController, NavParams, ModalController, Modal } from 'ionic-angular';
-import { Component, OnChanges } from '@angular/core';
+import { IonicPage, NavController, NavParams, ModalController, Modal, FabContainer  } from 'ionic-angular';
+import { Component, OnChanges, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
-import { Items, Scheduler } from '../../models/data-model';
+import { Item, Category, Scheduler } from '../../models/data-model';
 import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogram'
 import { SchedulerPage } from '../../pages/scheduler/scheduler'
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
-import { ColorPickerComponent } from '../../components/color-picker/color-picker'
 
 /**
  * Generated class for the SchedulerEditorPage page.
@@ -19,11 +18,14 @@ import { ColorPickerComponent } from '../../components/color-picker/color-picker
 @Component({
   selector: 'page-scheduler-editor',
   templateUrl: 'scheduler-editor.html',
+
 })
 export class SchedulerEditorPage {
 
   disableImage: boolean = false;
   disableText: boolean = false;
+  toggle = {};
+  edit: boolean = false;
 
   colors = {
     "color":[
@@ -45,15 +47,59 @@ export class SchedulerEditorPage {
     ]
   }
 
+  @Input() scheduler: Scheduler;
   schedulerForm: FormGroup;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public modalCtrl: ModalController, fab: FabContainer, public schedulerService: SchedulersProvider) {
+
+    this.edit = this.navParams.get("isEdit");
+    if (this.edit == true){
+      this.scheduler = this.navParams.get("scheduler");
+      this.createForm();
+      this.setForm(this.scheduler);
+
+    }
+    else{
+      this.createForm();
+    }
+
+  }
+
+  createForm(){
     this.schedulerForm = this.fb.group({
     // you can also set initial formgroup inside if you like
-    name: '',
+    id: [''],
+    name: [''],
+    preview: [''],
     hasImage: true,
     hasText: true,
     categories: this.fb.array([])
     })
+  }
+
+  setForm(scheduler: Scheduler){
+    this.schedulerForm.patchValue({
+      id: scheduler.id,
+      name: scheduler.name,
+      preview: scheduler.preview,
+      hasImage: scheduler.hasImage,
+      hasText: scheduler.hasText,
+    });
+
+    let categoriesFGs = scheduler.categories.map(categories => this.fb.group(categories));
+    let categoriesFromArray = this.fb.array(categoriesFGs);
+    this.schedulerForm.setControl('categories', categoriesFromArray);
+
+    for(let i=0; i<this.scheduler.categories.length; i++){
+      let itemsFGs = scheduler.categories[i].items.map(items => this.fb.group(items));
+      let itemsFromArray = this.fb.array(itemsFGs);
+      console.log('potatoe');
+      let allCategories = <FormArray> this.schedulerForm.controls.categories as FormArray;
+      let cat = <FormGroup> allCategories.controls[i] as FormGroup;
+      cat.setControl('items', itemsFromArray);
+
+      this.toggle[i]=true;
+    }
+
   }
 
   addNewCategory() {
@@ -64,9 +110,16 @@ export class SchedulerEditorPage {
         color: ['#FFFFFF'],
         textColor: ['#000000'],
         // nested form array, you could also add a form group initially
-        items: this.fb.array([])
+        items: this.fb.array([
+          this.fb.group({
+            itemText: [''],
+            itemImage: ['assets/imgs/placeholder_pictogram.png'],
+            itemFav:[false],
+        })
+      ])
       })
     )
+    this.toggle[control.length-1] = true;
   }
 
   deleteCategory(index) {
@@ -74,7 +127,7 @@ export class SchedulerEditorPage {
     control.removeAt(index);
   }
 
-  addNewItem(control) {
+  addNewItem(control: FormArray) {
     control.push(
       this.fb.group({
         itemText: [''],
@@ -91,6 +144,7 @@ export class SchedulerEditorPage {
 
     if(control.controls[index].get("itemFav").value==false){
       control.controls[index].patchValue({itemFav: true});
+
     }
     else{
       control.controls[index].patchValue({itemFav: false});
@@ -115,21 +169,8 @@ export class SchedulerEditorPage {
     })
   }
 
-/*
-  launchColorPicker(i){
-    let modal: Modal = this.modalCtrl.create(ColorPickerComponent);
-    modal.present();
-    modal.onDidDismiss((data)=>{
-      console.log(data);
-      if(data != null){
-        //patchValue({image: data.url})
-        this.categories.controls[i].get('color').patchValue({color: data.url});;
-      }
-    })
-  }
-  */
+  selectCatColor(i, k, fab){
 
-  selectCatColor(i, k){
     let cat = <FormArray> this.schedulerForm.get('categories');
     let color = this.colors.color[k].val.replace('#', '');
 
@@ -147,6 +188,10 @@ export class SchedulerEditorPage {
     else{
       cat.controls[i].patchValue({textColor: '#FFFFFF'});
     }
+
+    fab.close();
+    this.toggle[i]=true;
+
   }
 
   //Hides/Show pictos or text
@@ -166,5 +211,19 @@ export class SchedulerEditorPage {
       this.disableImage = false;
     }
   }
+
+  savePicto(){
+    //create random ID
+    let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    this.scheduler = this.schedulerForm.value;
+    this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
+    if(this.edit == false || this.edit==undefined){
+      this.scheduler.id = id;
+    }
+    this.schedulerService.addScheduler(this.scheduler);
+    this.navCtrl.pop();
+  }
+
+
 
 }

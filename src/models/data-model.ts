@@ -4,19 +4,25 @@ import { Injectable } from '@angular/core';
 export class Scheduler {
   id = '';
   name = '';
-  type = '';
-  items: Items[];
-  preview = '';
+  hasImage: boolean;
+  hasText: boolean;
+  categories: Category[];
+  preview = [''];
 }
 
 @Injectable()
-export class Items {
-  image = '';
-  text = '';
+export class Category {
+  category: [''];
+  color: [''];
+  textColor: [''];
+  items: Item[];
 }
 
-export class SchedulerList {
-  schedulers: Scheduler[];
+@Injectable()
+export class Item {
+  itemText: [''];
+  itemImage: ['assets/imgs/placeholder_pictogram.png'];
+  itemFav: [false];
 }
 
 /*

@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
 import { NavController, ViewController, AlertController, ActionSheetController,  NavParams, ModalController, Modal } from 'ionic-angular';
-//import { storage, initializeApp } from 'firebase';
-//import { FIREBASE_CONFIG } from '../../app/firebase.config';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerPage } from '../../pages/scheduler/scheduler';
-import { NewSchedulerPage } from '../../pages/new-scheduler/new-scheduler';
 import { SchedulerTemplatesPage } from '../../pages/scheduler-templates/scheduler-templates'
 import { SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor'
 
-import { Scheduler, Items } from '../../models/data-model';
+import { Scheduler, Item, Category } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
 
 
@@ -32,12 +29,10 @@ export class HomePage {
               public navParams: NavParams,
               public modalCtrl: ModalController,
               ){
-    //initializeApp(FIREBASE_CONFIG);
     this.statusBar.backgroundColorByHexString('#2085c1');
   }
 
   ionViewDidLoad(){
-    console.log('look right');
     console.log(this.schedulersService.scheds);
   }
 
@@ -47,12 +42,9 @@ export class HomePage {
 
   ionViewDidEnter(){
     this.schedulersService.load();
-    console.log(this.schedulersService.scheds);
-
   }
 
   openScheduler(scheduler : Scheduler){
-    //((console.log('card '+this.schedulersService.scheds.find(id)+' clicked');
     this.navCtrl.push(SchedulerPage,{
       scheduler : scheduler
     });
@@ -60,7 +52,6 @@ export class HomePage {
   }
 
   loadCreateScheduler(){
-    //this.navCtrl.push(NewSchedulerPage);
     this.navCtrl.push(SchedulerEditorPage);
   }
 
@@ -114,7 +105,6 @@ export class HomePage {
           role: 'cancel',
           text: 'Cancelar',
           handler: () => {
-            /**/
           }
         }
       ]
@@ -125,7 +115,7 @@ export class HomePage {
   }
 
   editScheduler(scheduler: Scheduler){
-    this.navCtrl.push(NewSchedulerPage,{
+    this.navCtrl.push(SchedulerEditorPage,{
       isEdit : true,
       scheduler : scheduler
     });
@@ -143,33 +133,4 @@ export class HomePage {
       */
     });
   }
-/*
-  async takePhoto() {
-    //definir opciones de camara
-    try {
-      const options: CameraOptions = {
-        quality: 50,
-        targetHeight: 500,
-        targetWidth: 500,
-        destinationType: this.camera.DestinationType.DATA_URL,
-        encodingType: this.camera.EncodingType.JPEG,
-        mediaType: this.camera.MediaType.PICTURE
-      }
-      const result = await this.camera.getPicture(options);
-
-      const image = 'data:image/jpeg;base64,' + result;
-
-      const pictures = storage().ref('pictures/myPhoto');
-
-      pictures.putString(image, 'data_url');
-
-      console.log("takingPhoto...");
-
-    }
-    catch (e) {
-      console.error(e);
-    }
-  }
-
-*/
 }
