@@ -226,7 +226,4 @@ export class SchedulerEditorPage {
     }
     this.navCtrl.pop();
   }
-
-
-
 }

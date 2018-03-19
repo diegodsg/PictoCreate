@@ -22,7 +22,7 @@
           <ion-grid>
             <h1 [style.color]="cat.textColor">{{cat.category}}</h1>
               <ion-row>
-                  <ion-col class="PictoItem" col-2 col-half-offset *ngFor="let item of cat.items">
+                  <ion-col class="PictoItem" col-3 col-half-offset *ngFor="let item of cat.items">
                     <ion-card>
                       <ion-card-content>
                         <img src="{{item.itemImage}}"/>
