@@ -14,21 +14,27 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
+
 <ion-content>
-  <ion-card>
-    <ion-card-content [hidden]="!hasImages">
+
+  <ion-card *ngFor="let cat of currentScheduler.categories" [style.background-color]="cat.color">
+    <ion-card-content>
           <ion-grid>
+            <h1 [style.color]="cat.textColor">{{cat.category}}</h1>
               <ion-row>
-                  <ion-col class="PictoItem" col-2 col-half-offset *ngFor="let item of currentScheduler.items">
-                    <img src="{{item.image}}"/>
-                    <p class="PictoText">{{item.text}}</p>
+                  <ion-col class="PictoItem" col-2 col-half-offset *ngFor="let item of cat.items">
+                    <ion-card>
+                      <ion-card-content>
+                        <img src="{{item.itemImage}}"/>
+                        <p class="PictoText">{{item.itemText}}</p>
+                      </ion-card-content>
+                    </ion-card>
                   </ion-col>
               </ion-row>
           </ion-grid>
     </ion-card-content>
-    <ion-card-content [hidden]="hasImages">
-    </ion-card-content>
   </ion-card>
+
 </ion-content>
 
 <ion-fab bottom right margin-bottom margin-right>

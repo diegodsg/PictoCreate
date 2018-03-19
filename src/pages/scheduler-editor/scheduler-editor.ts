@@ -219,8 +219,11 @@ export class SchedulerEditorPage {
     this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
     if(this.edit == false || this.edit==undefined){
       this.scheduler.id = id;
+      this.schedulerService.addScheduler(this.scheduler);
     }
-    this.schedulerService.addScheduler(this.scheduler);
+    else{
+      this.schedulerService.updateScheduler(this.scheduler);
+    }
     this.navCtrl.pop();
   }
 

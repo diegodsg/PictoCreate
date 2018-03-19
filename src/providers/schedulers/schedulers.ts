@@ -40,9 +40,7 @@ export class SchedulersProvider {
               this.storage.set('listSize',numScheds);
           });
       });
-
   }
-
 
   saveScheduler(scheduler: Scheduler){
     //console.log(scheduler);
@@ -97,8 +95,15 @@ getScheduler(id){
   });
 }
 
-updateScheduler(id){
-
-}
-
+  updateScheduler(scheduler: Scheduler){
+    let auxSched : Scheduler;
+    for(let i=0; i<this.scheds.length; i++){
+      if(this.scheds[i].id == scheduler.id){
+        this.scheds[i]=scheduler;
+      }
+    }
+    this.storage.set(this.key, this.scheds).then((res)=>{
+      console.log("scheduler updated");
+    })
+  }
 }

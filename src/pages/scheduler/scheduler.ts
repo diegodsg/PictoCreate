@@ -20,6 +20,7 @@ export class SchedulerPage {
 
   currentScheduler : Scheduler = new Scheduler;
   hasImages : boolean;
+  hasText: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public schedulerService: SchedulersProvider) {
     this.currentScheduler = this.navParams.get("scheduler");
