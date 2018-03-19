@@ -22,11 +22,11 @@
           <ion-grid>
             <h1 [style.color]="cat.textColor">{{cat.category}}</h1>
               <ion-row>
-                  <ion-col class="PictoItem" col-3 col-half-offset *ngFor="let item of cat.items">
+                  <ion-col class="PictoItem" col-sm-12 col-md-3 col-lg-2 col-half-offset *ngFor="let item of cat.items">
                     <ion-card>
                       <ion-card-content>
-                        <img src="{{item.itemImage}}"/>
-                        <p class="PictoText">{{item.itemText}}</p>
+                        <img *ngIf="currentScheduler.hasImage" src="{{item.itemImage}}"/>
+                        <p class="PictoText" *ngIf="currentScheduler.hasText">{{item.itemText}}</p>
                       </ion-card-content>
                     </ion-card>
                   </ion-col>

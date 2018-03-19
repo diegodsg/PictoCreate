@@ -14,13 +14,16 @@
 
 
 <ion-content padding>
-
-  <ion-slides>
-    <ion-slide *ngFor="let item of currentScheduler.items">
-      <img class="presentationImage" src="{{item.image}}"/>
-      <p class="presentationText">{{item.text}}</p>
-    </ion-slide>
-  </ion-slides>
+  <ion-card>
+    <ion-slides>
+      <ion-slide *ngFor="let item of favedItems">
+        <div class="coverflowCard">
+            <img src="{{item.itemImage}}"/>
+            <p class="presentationText">{{item.itemText}}</p>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </ion-card>
 
 <ion-grid>
   <ion-row class="cardButtons">

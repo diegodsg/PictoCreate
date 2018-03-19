@@ -17,15 +17,27 @@ export class PresentationPage {
   @ViewChild(Slides) slides: Slides;
   currentScheduler: Scheduler;
   paused: boolean = true;
+  favedItems: Item[] = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.currentScheduler = this.navParams.get("scheduler");
+
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PresentationPage');
-    console.log(this.currentScheduler);
-    this.slides;
+    this.slides.effect = 'coverflow';
+    this.loadFaved();
+    console.log(this.favedItems);
+  }
+
+  loadFaved(){
+    for(let i = 0; i<this.currentScheduler.categories.length; i++){
+      for(let j = 0; j<this.currentScheduler.categories[i].items.length; j++){
+        if(this.currentScheduler.categories[i].items[j].itemFav == true){
+          this.favedItems.push(this.currentScheduler.categories[i].items[j]);
+        }
+      }
+    }
   }
 
   startSlides(){
