@@ -92,7 +92,6 @@ export class SchedulerEditorPage {
     for(let i=0; i<this.scheduler.categories.length; i++){
       let itemsFGs = scheduler.categories[i].items.map(items => this.fb.group(items));
       let itemsFromArray = this.fb.array(itemsFGs);
-      console.log('potatoe');
       let allCategories = <FormArray> this.schedulerForm.controls.categories as FormArray;
       let cat = <FormGroup> allCategories.controls[i] as FormGroup;
       cat.setControl('items', itemsFromArray);

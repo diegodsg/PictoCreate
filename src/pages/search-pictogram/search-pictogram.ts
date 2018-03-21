@@ -14,6 +14,10 @@ import { Http } from '@angular/http'
 //import { HttpModule } from '@angular/http';
 
 import { Storage } from '@ionic/storage'
+
+import { UserImage } from '../../models/data-model'
+import { UserImagesProvider } from '../../providers/user-images/user-images'
+
 import 'rxjs/add/operator/map' //add aditional properties of an Observable
 
 declare var cordova: any;
@@ -61,7 +65,9 @@ export class SearchPictogramPage {
               private filePath: FilePath,
               public actionSheetCtrl: ActionSheetController,
               public toastCtrl: ToastController,
-              public loadingCtrl: LoadingController) {
+              public loadingCtrl: LoadingController,
+              public userImagesProvider: UserImagesProvider
+            ) {
 
     var path = "";
 		 	if(this.platform.is('android') && !this.platform.is('mobileweb')){
@@ -243,7 +249,13 @@ public takePicture(sourceType) {
           let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
           let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
           this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-          console.log(correctPath+'/'+currentName);
+
+          let path = correctPath+'/'+currentName;
+          //console.log(correctPath+'/'+currentName);
+          let imageData : UserImage;
+          imageData.keyword =  currentName;
+          imageData.path  = path;
+          //this.userImagesProvider.saveImage(imageData);
         });
     } else {
       var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);

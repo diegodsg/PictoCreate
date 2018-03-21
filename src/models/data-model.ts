@@ -25,6 +25,11 @@ export class Item {
   itemFav: boolean = false;
 }
 
+export class UserImage{
+  keyword: string;
+  path: string;
+}
+
 /*
 export class SchedulerListItem {
   id = '';

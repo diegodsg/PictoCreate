@@ -14,18 +14,23 @@
 
 
 <ion-content padding>
-  <ion-card>
-    <ion-slides>
-      <ion-slide *ngFor="let item of favedItems">
-        <div class="coverflowCard">
-            <img src="{{item.itemImage}}"/>
-            <p class="presentationText">{{item.itemText}}</p>
-        </div>
-      </ion-slide>
-    </ion-slides>
-  </ion-card>
 
-<ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-4 offset-4>
+      <ion-card>
+        <ion-slides>
+          <ion-slide *ngFor="let item of favedItems">
+            <div class="coverflowCard">
+                <img src="{{item.itemImage}}"/>
+                <p class="presentationText">{{item.itemText}}</p>
+            </div>
+          </ion-slide>
+        </ion-slides>
+      </ion-card>
+      </ion-col>
+    </ion-row>
+
   <ion-row class="cardButtons">
     <ion-col col-4>
       <button ion-button full clear (click)="previousSlide()">
