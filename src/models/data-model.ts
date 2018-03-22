@@ -25,9 +25,10 @@ export class Item {
   itemFav: boolean = false;
 }
 
+@Injectable()
 export class UserImage{
-  keyword: string;
-  path: string;
+  name = '';
+  url = '';
 }
 
 /*

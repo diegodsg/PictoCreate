@@ -41,7 +41,7 @@ export class SearchPictogramPage {
 
   pictograms: Array<any> = [];
   favourites: Array<any> = [];
-  personal: Array<any> = [];
+  personal: Array<UserImage> = [];
 
   temp: Array<any> = [];
 
@@ -53,6 +53,8 @@ export class SearchPictogramPage {
 
   lastImage: string = null;
   loading: Loading;
+
+  image: UserImage;
 
   constructor(public navCtrl: NavController,
               public params: NavParams,
@@ -66,8 +68,12 @@ export class SearchPictogramPage {
               public actionSheetCtrl: ActionSheetController,
               public toastCtrl: ToastController,
               public loadingCtrl: LoadingController,
-              public userImagesProvider: UserImagesProvider
+              public userImagesService: UserImagesProvider
             ) {
+
+    this.image = new UserImage();
+    this.image.url = 'assets/imgs/placeholder_pictogram.png';
+    this.image.name = 'lul';
 
     var path = "";
 		 	if(this.platform.is('android') && !this.platform.is('mobileweb')){
@@ -144,6 +150,7 @@ export class SearchPictogramPage {
   						this.total++;
   						//console.log("Found > ", value);
   						this.temp.push(this.pictograms[i]);
+
   					}
   				}
   				break;
@@ -166,6 +173,8 @@ export class SearchPictogramPage {
   				this.results.push(this.temp[j]);
   				this.cnt++;
   			}
+        console.log('this temp:');
+        console.log(this.temp);
   	}
 
   	canLoadMore(){
@@ -251,11 +260,17 @@ public takePicture(sourceType) {
           this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
 
           let path = correctPath+'/'+currentName;
-          //console.log(correctPath+'/'+currentName);
-          let imageData : UserImage;
-          imageData.keyword =  currentName;
-          imageData.path  = path;
-          //this.userImagesProvider.saveImage(imageData);
+
+          let imageData: UserImage = new UserImage();
+
+          console.log(path);
+          console.log(currentName);
+
+          imageData.name = currentName;
+          imageData.url  = path;
+
+          this.userImagesService.saveImage(imageData);
+
         });
     } else {
       var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);

@@ -49,7 +49,12 @@ export class SchedulerEditorPage {
 
   @Input() scheduler: Scheduler;
   schedulerForm: FormGroup;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private fb: FormBuilder, public modalCtrl: ModalController, fab: FabContainer, public schedulerService: SchedulersProvider) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              private fb: FormBuilder,
+              public modalCtrl: ModalController,
+              fab: FabContainer,
+              public schedulerService: SchedulersProvider) {
 
     this.edit = this.navParams.get("isEdit");
     if (this.edit == true){

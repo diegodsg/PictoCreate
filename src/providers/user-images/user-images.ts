@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+//import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserImage } from '../../models/data-model'
-import { Storage } from '@ionic/Storage'
+import { Storage } from '@ionic/storage'
 /*
   Generated class for the UserImagesProvider provider.
 
@@ -12,12 +12,15 @@ import { Storage } from '@ionic/Storage'
 export class UserImagesProvider {
 
   userImages: UserImage[];
-  key: string = '_userImages';
+  key: string = '_personalPicto';
 
-  constructor(public http: HttpClient, private storage: Storage) {
+  constructor(public storage: Storage) {
   }
 
   saveImage(data: UserImage){
+    if(this.userImages==undefined){
+        this.userImages = [];
+    }
     this.userImages.push(data);
     this.storage.set(this.key, this.userImages).then((res)=>{
       console.log('image saved');
