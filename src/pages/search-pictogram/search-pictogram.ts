@@ -276,7 +276,13 @@ public takePicture(sourceType) {
       var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
       var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
       this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-      console.log(correctPath+'/'+currentName);
+
+      let path = correctPath+'/'+currentName;
+      let imageData: UserImage = new UserImage();
+      imageData.name = currentName;
+      imageData.url  = path;
+
+      this.userImagesService.saveImage(imageData);
     }
   }, (err) => {
     this.presentToast('Error while selecting image.');
