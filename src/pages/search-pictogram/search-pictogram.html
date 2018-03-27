@@ -41,13 +41,6 @@
             <div class="card-subtitle">Tomar foto</div>
           </ion-card>
         </ion-col>
-        <ion-col col-12 col-md-4 *ngIf="type=='2'">
-          <ion-card>
-            <img src={{image.path}}>
-            <hr>
-            <div class="card-subtitle">{{image.keyword}}</div>
-          </ion-card>
-        </ion-col>
         <ion-col col-12 col-md-4 *ngFor="let picto of results">
   				<ion-card (click)="selectPictogram(picto)">
   		    	<img class="searchImage" [src]="picto.url">

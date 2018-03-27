@@ -1,20 +1,13 @@
-import { Component, ViewChild } from '@angular/core'
-
+import { Component, ViewChild, NgZone } from '@angular/core'
 import { IonicPage, NavController, NavParams,
          ViewController, Platform,
          LoadingController, Searchbar,
          ActionSheetController, ToastController, Loading } from 'ionic-angular'
-
 import { File } from '@ionic-native/file'
 import { FilePath } from '@ionic-native/file-path'
 import { Camera } from '@ionic-native/camera'
-
 import { Http } from '@angular/http'
-//import { HttpClientModule } from '@angular/common/http';
-//import { HttpModule } from '@angular/http';
-
 import { Storage } from '@ionic/storage'
-
 import { UserImage } from '../../models/data-model'
 import { UserImagesProvider } from '../../providers/user-images/user-images'
 
@@ -54,8 +47,6 @@ export class SearchPictogramPage {
   lastImage: string = null;
   loading: Loading;
 
-  image: UserImage;
-
   constructor(public navCtrl: NavController,
               public params: NavParams,
               public platform: Platform,
@@ -68,12 +59,9 @@ export class SearchPictogramPage {
               public actionSheetCtrl: ActionSheetController,
               public toastCtrl: ToastController,
               public loadingCtrl: LoadingController,
-              public userImagesService: UserImagesProvider
+              public userImagesService: UserImagesProvider,
+              public zone: NgZone
             ) {
-
-    this.image = new UserImage();
-    this.image.url = 'assets/imgs/placeholder_pictogram.png';
-    this.image.name = 'lul';
 
     var path = "";
 		 	if(this.platform.is('android') && !this.platform.is('mobileweb')){
@@ -93,13 +81,10 @@ export class SearchPictogramPage {
 			}
 		});
 
-		storage.get("_personalPicto").then((data) => {
-			console.log("personal pictos", data);
-			if(data !== null){
-				this.personal = data;
-				this.onSearch("");
-			}
-		});
+    this.userImagesService.loadImages();
+    if(this.userImagesService.userImages !== null){
+      this.onSearch("");
+    }
 
   }
 
@@ -155,16 +140,18 @@ export class SearchPictogramPage {
   				}
   				break;
   			case "2":
-  				for(let i = 0; i < this.personal.length; i++){
-  					let v = this.personal[i].name;
+
+          for(let i = 0; i < this.userImagesService.userImages.length; i++){
+  					let v = this.userImagesService.userImages[i].name;
   					//if(value.toLowerCase().indexOf(this.searchbar.value.toLowerCase()) >= 0){
   					if(v !== undefined && v.toLowerCase().indexOf(value.toLowerCase()) >= 0){
   						this.total++;
   						//console.log("Found > ", value);
-  						this.temp.push(this.personal[i]);
+  						this.temp.push(this.userImagesService.userImages[i]);
   					}
   				}
   				break;
+
 
   		}
 
@@ -244,45 +231,71 @@ public takePicture(sourceType) {
   // Create options for the Camera Dialog
   var options = {
     quality: 100,
+    allowEdit: true,
     sourceType: sourceType,
     saveToPhotoAlbum: false,
-    correctOrientation: true
+    correctOrientation: true,
+    targetWidth: 500,
+    targetHeight: 500
   };
 
   // Get the data of an image
   this.camera.getPicture(options).then((imagePath) => {
     // Special handling for Android library
     if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-      this.filePath.resolveNativePath(imagePath)
-        .then(filePath => {
+
+      console.log('imagePath: '+imagePath);
+
+      this.filePath.resolveNativePath(imagePath).then(filePath => {
+
+          console.log('filepath: '+filePath);
+
           let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
           let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-          this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-
-          let path = correctPath+'/'+currentName;
 
           let imageData: UserImage = new UserImage();
 
-          console.log(path);
-          console.log(currentName);
+          let imageName = this.createFileName()
+          this.copyFileToLocalDir(correctPath, currentName, imageName, imageData);
 
-          imageData.name = currentName;
+          let path = correctPath+'/'+currentName;
+
+          console.log('path: '+correctPath);
+          console.log('name: '+currentName);
+
+          imageData.name = imageName;
           imageData.url  = path;
+          this.userImagesService.addImage(imageData);
+          this.userImagesService.saveImages();
+          this.onSearch("");
 
-          this.userImagesService.saveImage(imageData);
+          this.camera.cleanup();
+
+
+
 
         });
     } else {
+
+      let imageData: UserImage = new UserImage();
+
+
       var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
       var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-      this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+      this.copyFileToLocalDir(correctPath, currentName, this.createFileName(), imageData);
 
       let path = correctPath+'/'+currentName;
-      let imageData: UserImage = new UserImage();
-      imageData.name = currentName;
-      imageData.url  = path;
 
-      this.userImagesService.saveImage(imageData);
+      console.log('path: '+correctPath);
+      console.log('name: '+currentName);
+
+      imageData.name = currentName;
+      this.userImagesService.addImage(imageData);
+      this.userImagesService.saveImages();
+      this.onSearch("");
+
+
+
     }
   }, (err) => {
     this.presentToast('Error while selecting image.');
@@ -294,13 +307,15 @@ private createFileName() {
   var d = new Date(),
   n = d.getTime(),
   newFileName =  n + ".jpg";
+  console.log('newFileName: '+newFileName);
   return newFileName;
 }
 
 // Copy the image to a local folder
-private copyFileToLocalDir(namePath, currentName, newFileName) {
+private copyFileToLocalDir(namePath, currentName, newFileName, image: UserImage) {
   this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
     this.lastImage = newFileName;
+    image.url = success.nativeURL;
   }, error => {
     this.presentToast('Error while storing file.');
   });
@@ -323,7 +338,5 @@ public pathForImage(img){
     return cordova.file.dataDirectory + img;
   }
 }
-
-
 
 }

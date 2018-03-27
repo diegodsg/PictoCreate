@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, ViewController, AlertController, ActionSheetController,  NavParams, ModalController, Modal } from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController,  NavParams, ModalController, Modal } from 'ionic-angular';
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerPage } from '../../pages/scheduler/scheduler';
 import { SchedulerTemplatesPage } from '../../pages/scheduler-templates/scheduler-templates'
 import { SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor'
 
-import { Scheduler, Item, Category } from '../../models/data-model';
+import { Scheduler } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
 
 
@@ -23,7 +23,6 @@ export class HomePage {
   constructor(public navCtrl: NavController,
               public schedulersService: SchedulersProvider,
               private statusBar: StatusBar,
-              private viewCtrl: ViewController,
               private alertCtrl: AlertController,
               public actionSheetCtrl: ActionSheetController,
               public navParams: NavParams,

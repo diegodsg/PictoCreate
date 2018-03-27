@@ -1,9 +1,8 @@
 import { IonicPage, NavController, NavParams, ModalController, Modal, FabContainer  } from 'ionic-angular';
 import { Component, OnChanges, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
-import { Item, Category, Scheduler } from '../../models/data-model';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { Scheduler } from '../../models/data-model';
 import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogram'
-import { SchedulerPage } from '../../pages/scheduler/scheduler'
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
 

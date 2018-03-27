@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
-import { Scheduler, Item, Category } from '../../models/data-model'
+import { Scheduler, Item } from '../../models/data-model'
 /**
  * Generated class for the PresentationPage page.
  *

@@ -27,6 +27,7 @@ export class Item {
 
 @Injectable()
 export class UserImage{
+  id = '';
   name = '';
   url = '';
 }

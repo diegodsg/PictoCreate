@@ -1,7 +1,7 @@
 //import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { Scheduler, Item, Category } from '../../models/data-model';
+import { Scheduler } from '../../models/data-model';
 
 /*
   Generated class for the SchedulersProvider provider.
@@ -96,7 +96,6 @@ getScheduler(id){
 }
 
   updateScheduler(scheduler: Scheduler){
-    let auxSched : Scheduler;
     for(let i=0; i<this.scheds.length; i++){
       if(this.scheds[i].id == scheduler.id){
         this.scheds[i]=scheduler;

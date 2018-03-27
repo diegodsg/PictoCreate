@@ -28,6 +28,20 @@ export class UserImagesProvider {
     });
   }
 
+  addImage(data: UserImage){
+    if(this.userImages==undefined){
+        this.userImages = [];
+    }
+    this.userImages.push(data);
+  }
+
+  saveImages(){
+    this.storage.set(this.key, this.userImages).then((res)=>{
+      console.log('image saved');
+      console.log(this.userImages);
+    });
+  }
+
   loadImages(){
     this.storage.get(this.key).then((res)=>{
       if(res!=null){
