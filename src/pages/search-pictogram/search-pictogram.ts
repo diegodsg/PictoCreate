@@ -2,7 +2,7 @@ import { Component, ViewChild, NgZone } from '@angular/core'
 import { IonicPage, NavController, NavParams,
          ViewController, Platform,
          LoadingController, Searchbar,
-         ActionSheetController, ToastController, Loading } from 'ionic-angular'
+         ActionSheetController, ToastController, Loading, AlertController  } from 'ionic-angular'
 import { File } from '@ionic-native/file'
 import { FilePath } from '@ionic-native/file-path'
 import { Camera } from '@ionic-native/camera'
@@ -60,7 +60,7 @@ export class SearchPictogramPage {
               public toastCtrl: ToastController,
               public loadingCtrl: LoadingController,
               public userImagesService: UserImagesProvider,
-              public zone: NgZone
+              private alertCtrl: AlertController
             ) {
 
     var path = "";
@@ -244,20 +244,16 @@ public takePicture(sourceType) {
     // Special handling for Android library
     if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
 
-      console.log('imagePath: '+imagePath);
+      //console.log('imagePath: '+imagePath);
 
       this.filePath.resolveNativePath(imagePath).then(filePath => {
-
-          console.log('filepath: '+filePath);
-
+          //console.log('filepath: '+filePath);
           let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
           let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-
           let imageData: UserImage = new UserImage();
-
           let imageName = this.createFileName()
           this.copyFileToLocalDir(correctPath, currentName, imageName, imageData);
-
+/*
           let path = correctPath+'/'+currentName;
 
           console.log('path: '+correctPath);
@@ -272,18 +268,16 @@ public takePicture(sourceType) {
           this.camera.cleanup();
 
 
+*/
 
 
         });
     } else {
-
       let imageData: UserImage = new UserImage();
-
-
       var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
       var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
       this.copyFileToLocalDir(correctPath, currentName, this.createFileName(), imageData);
-
+/*
       let path = correctPath+'/'+currentName;
 
       console.log('path: '+correctPath);
@@ -294,11 +288,12 @@ public takePicture(sourceType) {
       this.userImagesService.saveImages();
       this.onSearch("");
 
+*/
 
 
     }
   }, (err) => {
-    this.presentToast('Error while selecting image.');
+    this.presentToast('Ha habido algún problema seleccionando la imagen.');
   });
 }
 
@@ -313,13 +308,49 @@ private createFileName() {
 
 // Copy the image to a local folder
 private copyFileToLocalDir(namePath, currentName, newFileName, image: UserImage) {
-  this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-    this.lastImage = newFileName;
-    image.url = success.nativeURL;
-  }, error => {
-    this.presentToast('Error while storing file.');
-  });
+
+let alert = this.alertCtrl.create({
+  title: 'Nombre',
+  message:'Introduce un nombre para la imagen, servirá para buscar la imagen por este nombre',
+  inputs: [
+    {
+      name: 'name',
+      placeholder: 'Nombre'
+    }
+  ],
+  buttons: [
+    {
+      text: 'Cancel',
+      role: 'cancel',
+      handler: data => {
+        console.log('Cancel clicked');
+      }
+    },
+    {
+      text: 'OK',
+      handler: data => {
+        image.name = data.name;
+        this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, image.name).then(success => {
+          let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+          this.lastImage = image.name;
+          image.url = success.nativeURL;
+          image.id = id;
+
+          this.userImagesService.addImage(image);
+          this.userImagesService.saveImages();
+          this.onSearch("");
+        }, error => {
+          this.presentToast('Error while storing file.');
+          this.onSearch("");
+        }
+      );
+      }
+    }
+  ]
+});
+alert.present();
 }
+
 
 private presentToast(text) {
   let toast = this.toastCtrl.create({
