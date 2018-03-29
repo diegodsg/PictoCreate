@@ -1,14 +1,16 @@
 page-search-pictogram {
   	ion-header{
   		ion-segment{
+        background-color: #2085c1 !important;
         ion-segment-button.segment-button{
           font-size: 1.5rem !important;
+          color: #9ae6ff !important;
           border-bottom-width: 3px !important;
+          background-color: #2085c1 !important;
           &.segment-activated{
             color: #FFFFFF !important;
             background-color: map-get($colors, primary) !important;
             border-bottom-color: map-get($colors, primary) !important;
-
           }
         }
   		}

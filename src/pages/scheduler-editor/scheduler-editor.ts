@@ -160,7 +160,7 @@ export class SchedulerEditorPage {
   }
 
   pictogramSearch(i, j){
-    let modal: Modal = this.modalCtrl.create(SearchPictogramPage);
+    let modal: Modal = this.modalCtrl.create(SearchPictogramPage, undefined, {cssClass: "modal-fullscreen"});
     modal.present();
     modal.onDidDismiss((data)=>{
       console.log(data);
