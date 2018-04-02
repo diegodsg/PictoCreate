@@ -1,4 +1,6 @@
-import { IonicPage, NavController, NavParams, ModalController, Modal, FabContainer  } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,
+         ModalController, Modal, FabContainer,
+         ToastController} from 'ionic-angular';
 import { Component, OnChanges, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Scheduler } from '../../models/data-model';
@@ -53,6 +55,7 @@ export class SchedulerEditorPage {
               private fb: FormBuilder,
               public modalCtrl: ModalController,
               fab: FabContainer,
+              public toastCtrl: ToastController,
               public schedulerService: SchedulersProvider) {
 
     this.edit = this.navParams.get("isEdit");
@@ -72,12 +75,14 @@ export class SchedulerEditorPage {
     this.schedulerForm = this.fb.group({
     // you can also set initial formgroup inside if you like
     id: [''],
-    name: [''],
+    name: ['', Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z ]*'), Validators.required])],
     preview: [''],
     hasImage: true,
     hasText: true,
     categories: this.fb.array([])
     })
+
+    this.addNewCategory();
   }
 
   setForm(scheduler: Scheduler){
@@ -215,18 +220,37 @@ export class SchedulerEditorPage {
     }
   }
 
+  private presentToast(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
   savePicto(){
-    //create random ID
-    let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    this.scheduler = this.schedulerForm.value;
-    this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
-    if(this.edit == false || this.edit==undefined){
-      this.scheduler.id = id;
-      this.schedulerService.addScheduler(this.scheduler);
+    //check values.
+
+    if(this.schedulerForm.get('name').value==""){
+      this.presentToast("Introduce un nombre para el planificador");
+    }
+    else if(this.schedulerForm.get('categories').value.length<1){
+      this.presentToast("El planificador está vacío");
     }
     else{
-      this.schedulerService.updateScheduler(this.scheduler);
-    }
-    this.navCtrl.pop();
+      //create random ID
+      let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      this.scheduler = this.schedulerForm.value;
+      this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
+      if(this.edit == false || this.edit==undefined){
+        this.scheduler.id = id;
+        this.schedulerService.addScheduler(this.scheduler);
+      }
+      else{
+        this.schedulerService.updateScheduler(this.scheduler);
+      }
+      this.navCtrl.popToRoot();
+  }
   }
 }

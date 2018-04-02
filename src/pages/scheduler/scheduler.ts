@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
 import { Scheduler } from '../../models/data-model'
 import { PresentationPage } from '../../pages/presentation/presentation';
+import {SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor';
 
 /**
  * Generated class for the SchedulerPage page.
@@ -27,15 +28,12 @@ export class SchedulerPage {
     //this.schedulerService.getScheduler(this.schedulerId);
   }
 
-/*
-  ionViewDidLoad() {
-    console.log(this.currentScheduler);
-    if(this.currentScheduler.type == 'isText'){
-      this.hasImages = false;
-    }else{
-      this.hasImages = true;
-    }
-  }*/
+  editScheduler(scheduler: Scheduler){
+    this.navCtrl.push(SchedulerEditorPage,{
+      isEdit : true,
+      scheduler : scheduler
+    });
+  }
 
   loadPresentation(){
     this.navCtrl.push(PresentationPage,{
