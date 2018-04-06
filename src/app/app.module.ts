@@ -26,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 //import { Scheduler, Items } from '../models/data-model'
 
 import { File } from '@ionic-native/file'
+import { FileOpener } from '@ionic-native/file-opener';
 import { FilePath } from '@ionic-native/file-path'
 import { Camera } from '@ionic-native/camera'
 
@@ -74,6 +75,7 @@ import { UserImagesProvider } from '../providers/user-images/user-images';
     SplashScreen,
     Camera,
     File,
+    FileOpener,
     Camera,
     FilePath,
     FabContainer,

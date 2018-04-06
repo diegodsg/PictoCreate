@@ -24,7 +24,7 @@
                 </button>
               </ion-col>
               <ion-col col-4>
-                <button ion-button full clear (click)=shareScheduler(scheduler.id)>
+                <button ion-button full clear (click)=shareScheduler(scheduler)>
                   <ion-icon name="share"></ion-icon>
                 </button>
               </ion-col>
@@ -40,11 +40,7 @@
     </ion-grid>
 
     <ion-fab bottom right margin-bottom margin-right>
-      <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
-      <ion-fab-list side="top">
-        <button ion-fab (click)="loadCreateScheduler()"><ion-icon name="create"></ion-icon></button>
-        <button ion-fab (click)="loadTemplatesModal()"><ion-icon name="albums"></ion-icon></button>
-      </ion-fab-list>
+      <button ion-fab color="light" (click)="loadTemplatesModal()"><ion-icon name="add"></ion-icon></button>
     </ion-fab>
 
     <!--

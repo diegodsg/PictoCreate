@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController,  NavParams, ModalController, Modal } from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController,
+         NavParams, ModalController, Modal,
+         Platform } from 'ionic-angular';
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerPage } from '../../pages/scheduler/scheduler';
@@ -10,13 +12,21 @@ import { Scheduler } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
 
 
+//PDF generation
+import { File } from '@ionic-native/file';
+import { FileOpener } from '@ionic-native/file-opener';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+declare var cordova: any;
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
-  schedulerList: any = {};
+  pdfObj = null;
 
   Imagen = 'assets/imgs/pictograma.jpg'
 
@@ -27,43 +37,51 @@ export class HomePage {
               public actionSheetCtrl: ActionSheetController,
               public navParams: NavParams,
               public modalCtrl: ModalController,
+              private plt: Platform,
+              private file: File,
+              private fileOpener: FileOpener,
               ){
     this.statusBar.backgroundColorByHexString('#2085c1');
   }
 
   ionViewDidLoad(){
     console.log(this.schedulersService.scheds);
+
   }
 
   ionViewWillEnter(){
     this.schedulersService.load();
+    this.schedulersService.loadTemplates();
+
   }
 
   ionViewDidEnter(){
     this.schedulersService.load();
+    this.schedulersService.loadTemplates();
+
   }
 
   openScheduler(scheduler : Scheduler){
     this.navCtrl.push(SchedulerPage,{
       scheduler : scheduler
     });
-
   }
 
   loadCreateScheduler(){
     this.navCtrl.push(SchedulerEditorPage);
   }
 
-  shareScheduler(id){
+  shareScheduler(scheduler: Scheduler){
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Compartir/Exportar Planificador',
       buttons: [
         {
-
           text: 'Exportar como PDF',
           icon: 'document',
           handler: () => {
-            console.log('export as PDF clicked');
+            console.log('a PDF from Scheduler '+scheduler.id+' should be generated.');
+            //this.createPdf(scheduler);
+            //this.downloadPdf();
           }
         },{
           text: 'Exportar como Imágenes',
@@ -115,21 +133,81 @@ export class HomePage {
 
   editScheduler(scheduler: Scheduler){
     this.navCtrl.push(SchedulerEditorPage,{
-      isEdit : true,
+      isEdit : 1,
       scheduler : scheduler
     });
   }
 
   loadTemplatesModal(){
-    let modal: Modal = this.modalCtrl.create(SchedulerTemplatesPage);
-    modal.present();
-    modal.onDidDismiss((data)=>{
-      console.log(data);
-      /*
-      if(data != null){
-        editScheduler(data);
-      }
-      */
+    console.log(this.schedulersService.templates);
+    let modal: Modal = this.modalCtrl.create(SchedulerTemplatesPage,{
+      templates: this.schedulersService.templates,
     });
+    modal.present();
   }
+
+
+/*
+  //Create PDF
+  createPdf(scheduler: Scheduler) {
+
+  let image = {
+    image: '',
+    width: 100
+  }
+
+  let text = {
+    text: '',
+    width: 100
+  }
+
+  let rows = [];
+
+  for(let i = 0; i<scheduler.categories.length; i++){
+    console.log(scheduler.categories[i].items.length);
+    for(let j = 0; j<scheduler.categories[i].items.length; j++){
+      let txt = scheduler.categories[i].items[j].itemText;
+      text.text = txt;
+      let src :string = scheduler.categories[i].items[j].itemImage;
+      image.image = src;
+      //rows.push(image);
+      rows.push(text);
+      console.log(rows);
+    }
+  }
+
+
+  var docDefinition = {
+    content: [
+      {
+    			image: coded,
+    			width: 150
+    		},
+    ],
+    pageOrientation: 'landscape',
+  }
+
+  this.pdfObj = pdfMake.createPdf(docDefinition);
+}
+
+downloadPdf() {
+  if (this.plt.is('cordova')) {
+    this.pdfObj.getBuffer((buffer) => {
+      var blob = new Blob([buffer], { type: 'application/pdf' });
+
+      // Save the PDF to the data Directory of our App
+      this.file.writeFile(this.file.dataDirectory, 'myletter.pdf', blob, { replace: true }).then(fileEntry => {
+        // Open the PDf with the correct OS tools
+        this.fileOpener.open(this.file.dataDirectory + 'myletter.pdf', 'application/pdf');
+
+      })
+    });
+  } else {
+    // On a browser simply use download!
+    this.pdfObj.download();
+  }
+}
+
+
+*/
 }

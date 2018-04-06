@@ -7,21 +7,41 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Plantillas</ion-title>
+    <ion-title>Crear Planificador</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
   <ion-grid>
       <ion-row>
-        <ion-col col-sm-12 col-md-4 col-lg-3>
-          <ion-card (click)="selectTemplate()">
+        <!-- New -->
+        <ion-col col-sm-12 col-md-4>
+          <ion-card (click)="loadCreateScheduler()">
             <img src = {{Image}} />
-            <p class = "templateTitle"> Plantilla 1 </p>
+            <p class = "templateTitle"> Nuevo Planificador </p>
           </ion-card>
         </ion-col>
+
+        <ion-col *ngFor="let template of templates" col-sm-12 col-md-4>
+          <ion-card (click)="selectTemplate(template)">
+            <img src = {{template.preview}} />
+            <p class = "templateTitle"> {{template.name}} </p>
+          </ion-card>
+        </ion-col>
+
       </ion-row>
     </ion-grid>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons right>
+      <button ion-button icon-right (click)="loadCreateTemplate()">
+        Crear Plantilla
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

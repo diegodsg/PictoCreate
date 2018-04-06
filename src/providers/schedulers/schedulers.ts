@@ -14,8 +14,14 @@ import { Scheduler } from '../../models/data-model';
 export class SchedulersProvider {
 
   scheds : Scheduler[];
-  key = '_schedulers';
+  templates : Scheduler[];
+
+  scheduler_key = '_schedulers';
+  template_key = '_templates';
+
   listSize = 0;
+  listSize_templates = 0;
+
   emptyList = true;
   scheduler : Scheduler;
   //schedulers: Scheduler = [];
@@ -25,7 +31,7 @@ export class SchedulersProvider {
   }
 
   addScheduler(scheduler: Scheduler){
-      this.storage.get(this.key).then((res) => {
+      this.storage.get(this.scheduler_key).then((res) => {
           if(res==undefined){
               res = [];
           }
@@ -36,7 +42,7 @@ export class SchedulersProvider {
               numScheds++;
               res.push(scheduler);
               console.log(res);
-              this.storage.set(this.key, res);
+              this.storage.set(this.scheduler_key, res);
               this.storage.set('listSize',numScheds);
           });
       });
@@ -44,19 +50,38 @@ export class SchedulersProvider {
 
   saveScheduler(scheduler: Scheduler){
     //console.log(scheduler);
-    this.storage.get(this.key).then(res=>{
+    this.storage.get(this.scheduler_key).then(res=>{
       let list = [];
       list = res;
       list.push(scheduler);
       console.log('lista es'+ list);
-      this.storage.set(this.key, list).then(res=>{
+      this.storage.set(this.scheduler_key, list).then(res=>{
         console.log('added items');
       });
     });
 }
 
+addTemplate(scheduler: Scheduler){
+    this.storage.get(this.template_key).then((res) => {
+        if(res==undefined){
+            res = [];
+        }
+        this.storage.get('listSize_templates').then((numScheds) => {
+            if(numScheds==undefined){
+                numScheds = 1;
+            }
+            numScheds++;
+            res.push(scheduler);
+            console.log(res);
+            this.storage.set(this.template_key, res);
+            this.storage.set('listSize_templates',numScheds);
+        });
+    });
+}
+
+
   load(){
-    this.storage.get(this.key).then((val) => {
+    this.storage.get(this.scheduler_key).then((val) => {
           if(val == null){
             this.emptyList=true;
           }
@@ -70,8 +95,14 @@ export class SchedulersProvider {
         });
   }
 
+  loadTemplates(){
+    this.storage.get(this.template_key).then((val) => {
+          this.templates=val;
+        });
+  }
+
 deleteScheduler(id){
-  this.storage.get(this.key).then((val) => {
+  this.storage.get(this.scheduler_key).then((val) => {
     let schedsAux = [];
     for(var i=0; i<val.length; i++){
       if(val[i].id != id){
@@ -79,14 +110,34 @@ deleteScheduler(id){
       }
     }
     this.scheds = schedsAux;
-    this.storage.set(this.key, schedsAux).then((val)=>{
+    this.storage.set(this.scheduler_key, schedsAux).then((val)=>{
+      console.log('item '+id+' deleted');
+    })
+
+    if(this.scheds.length == 0){
+      this.emptyList = true;
+    }
+  });
+
+}
+
+deleteTemplate(id){
+  this.storage.get(this.template_key).then((val) => {
+    let schedsAux = [];
+    for(var i=0; i<val.length; i++){
+      if(val[i].id != id){
+        schedsAux.push(val[i]);
+      }
+    }
+    this.templates = schedsAux;
+    this.storage.set(this.template_key, schedsAux).then((val)=>{
       console.log('item '+id+' deleted');
     })
   });
 }
 
 getScheduler(id){
-  this.storage.get(this.key).then((val) => {
+  this.storage.get(this.scheduler_key).then((val) => {
     for(var i=0; i<val.length; i++){
       if(val[i].id == id){
         this.scheduler = val[i];
@@ -101,7 +152,7 @@ getScheduler(id){
         this.scheds[i]=scheduler;
       }
     }
-    this.storage.set(this.key, this.scheds).then((res)=>{
+    this.storage.set(this.scheduler_key, this.scheds).then((res)=>{
       console.log("scheduler updated");
     })
   }

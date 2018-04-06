@@ -7,7 +7,7 @@ export class Scheduler {
   hasImage: boolean;
   hasText: boolean;
   categories: Category[];
-  preview = [''];
+  preview = '';
 }
 
 @Injectable()
@@ -20,8 +20,8 @@ export class Category {
 
 @Injectable()
 export class Item {
-  itemText: [''];
-  itemImage: ['assets/imgs/placeholder_pictogram.png'];
+  itemText: '';
+  itemImage: 'assets/imgs/placeholder_pictogram.png';
   itemFav: boolean = false;
 }
 

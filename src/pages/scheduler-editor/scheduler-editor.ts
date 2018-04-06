@@ -5,8 +5,11 @@ import { Component, OnChanges, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Scheduler } from '../../models/data-model';
 import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogram'
+import { HomePage } from '../../pages/home/home'
+
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers'
+
 
 /**
  * Generated class for the SchedulerEditorPage page.
@@ -26,7 +29,7 @@ export class SchedulerEditorPage {
   disableImage: boolean = false;
   disableText: boolean = false;
   toggle = {};
-  edit: boolean = false;
+  edit = 0; //0 - creator , 1 - editor, 2 - template, 3 - create from template
 
   colors = {
     "color":[
@@ -50,6 +53,8 @@ export class SchedulerEditorPage {
 
   @Input() scheduler: Scheduler;
   schedulerForm: FormGroup;
+  pageTitle: string;
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private fb: FormBuilder,
@@ -59,15 +64,30 @@ export class SchedulerEditorPage {
               public schedulerService: SchedulersProvider) {
 
     this.edit = this.navParams.get("isEdit");
-    if (this.edit == true){
+
+    if (this.edit == 1){
       this.scheduler = this.navParams.get("scheduler");
       this.createForm();
       this.setForm(this.scheduler);
-
+      this.pageTitle ="Editar Planificador";
+    }
+    else if(this.edit == 2){
+      this.createForm();
+      this.pageTitle = "Crear Plantilla";
+    }
+    else if(this.edit == 3){
+      this.scheduler = this.navParams.get("scheduler");
+      this.createForm();
+      this.setForm(this.scheduler);
+      this.pageTitle = "Crear Planificador"
     }
     else{
+      this.edit = 0;
       this.createForm();
+      this.pageTitle="Crear Planificador";
     }
+
+    console.log(this.edit);
 
   }
 
@@ -231,7 +251,6 @@ export class SchedulerEditorPage {
 
   savePicto(){
     //check values.
-
     if(this.schedulerForm.get('name').value==""){
       this.presentToast("Introduce un nombre para el planificador");
     }
@@ -243,14 +262,17 @@ export class SchedulerEditorPage {
       let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       this.scheduler = this.schedulerForm.value;
       this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
-      if(this.edit == false || this.edit==undefined){
+      if(this.edit == 0 || this.edit==3 || this.edit==undefined){
         this.scheduler.id = id;
         this.schedulerService.addScheduler(this.scheduler);
       }
-      else{
+      else if(this.edit == 1){
         this.schedulerService.updateScheduler(this.scheduler);
       }
-      this.navCtrl.popToRoot();
-  }
+      else if(this.edit== 2){
+        this.schedulerService.addTemplate(this.scheduler);
+      }
+      this.navCtrl.setRoot(HomePage);
+    }
   }
 }
