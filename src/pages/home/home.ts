@@ -71,6 +71,10 @@ export class HomePage {
     this.navCtrl.push(SchedulerEditorPage);
   }
 
+  refreshHomePage(){
+    this.navCtrl.setRoot(HomePage);
+  }
+
   shareScheduler(scheduler: Scheduler){
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Compartir/Exportar Planificador',

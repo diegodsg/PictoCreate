@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>PictoCreate</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="refreshHomePage()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -15,7 +20,7 @@
           <ion-card>
             <p class = "schedulerTitle">{{scheduler.name}}</p>
             <hr>
-            <img src = {{scheduler.preview}} (click)="openScheduler(scheduler)"/>
+              <img class="preview" src = {{scheduler.preview}} (click)="openScheduler(scheduler)"/>
             <hr>
             <ion-row class="cardButtons">
               <ion-col col-4>

@@ -33,7 +33,7 @@ import { Camera } from '@ionic-native/camera'
 //providers
 import { SchedulersProvider } from '../providers/schedulers/schedulers'
 import { UserImagesProvider } from '../providers/user-images/user-images';
-//import { Screenshot } from '@ionic-native/screenshot'
+import { Screenshot } from '@ionic-native/screenshot'
 
 @NgModule({
   declarations: [
@@ -83,8 +83,7 @@ import { UserImagesProvider } from '../providers/user-images/user-images';
     SchedulersProvider,
     HttpClientModule,
     UserImagesProvider,
-    //Screenshot,
-    //File,
+    Screenshot,
   ]
 })
 export class AppModule {}

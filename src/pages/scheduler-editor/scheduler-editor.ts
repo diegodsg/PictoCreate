@@ -4,12 +4,12 @@ import { IonicPage, NavController, NavParams,
 import { Component, OnChanges, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Scheduler } from '../../models/data-model';
-import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogram'
-import { HomePage } from '../../pages/home/home'
+import { SearchPictogramPage } from '../../pages/search-pictogram/search-pictogram';
+import { HomePage } from '../../pages/home/home';
 
+import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 
-import { SchedulersProvider } from '../../providers/schedulers/schedulers'
-
+import { Screenshot } from '@ionic-native/screenshot'
 
 /**
  * Generated class for the SchedulerEditorPage page.
@@ -55,13 +55,15 @@ export class SchedulerEditorPage {
   schedulerForm: FormGroup;
   pageTitle: string;
 
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               private fb: FormBuilder,
               public modalCtrl: ModalController,
               fab: FabContainer,
               public toastCtrl: ToastController,
-              public schedulerService: SchedulersProvider) {
+              public schedulerService: SchedulersProvider,
+              private screenshot: Screenshot) {
 
     this.edit = this.navParams.get("isEdit");
 
@@ -258,21 +260,26 @@ export class SchedulerEditorPage {
       this.presentToast("El planificador está vacío");
     }
     else{
-      //create random ID
       let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      this.scheduler = this.schedulerForm.value;
-      this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
-      if(this.edit == 0 || this.edit==3 || this.edit==undefined){
-        this.scheduler.id = id;
-        this.schedulerService.addScheduler(this.scheduler);
-      }
-      else if(this.edit == 1){
-        this.schedulerService.updateScheduler(this.scheduler);
-      }
-      else if(this.edit== 2){
-        this.schedulerService.addTemplate(this.scheduler);
-      }
-      this.navCtrl.setRoot(HomePage);
+      this.screenshot.save('jpg', 80, id).then(res => {
+          //create random ID
+          this.scheduler = this.schedulerForm.value;
+          //this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
+          this.scheduler.preview = res.filePath;
+          console.log(this.scheduler);
+          if(this.edit == 0 || this.edit==3 || this.edit==undefined){
+              this.scheduler.id = id;
+              this.schedulerService.addScheduler(this.scheduler);
+          }
+          else if(this.edit == 1){
+              this.schedulerService.updateScheduler(this.scheduler);
+          }
+          else if(this.edit== 2){
+              this.schedulerService.addTemplate(this.scheduler);
+          }
+              this.navCtrl.setRoot(HomePage);
+
+      });
     }
   }
 }

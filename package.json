@@ -25,13 +25,14 @@
         "@ionic-native/file": "^4.6.0",
         "@ionic-native/file-opener": "^4.6.0",
         "@ionic-native/file-path": "^4.5.3",
-        "@ionic-native/screenshot": "^4.5.3",
+        "@ionic-native/screenshot": "^4.6.0",
         "@ionic-native/splash-screen": "4.4.0",
         "@ionic-native/status-bar": "^4.5.3",
         "@ionic/storage": "^2.1.3",
         "com.darktalker.cordova.screenshot": "^0.1.6",
         "cordova-android": "^7.0.0",
         "cordova-plugin-camera": "^4.0.2",
+        "cordova-plugin-crop": "^0.4.0",
         "cordova-plugin-device": "^2.0.1",
         "cordova-plugin-file": "^6.0.1",
         "cordova-plugin-file-opener2": "^2.0.19",
@@ -46,6 +47,7 @@
         "ionic-angular": "3.9.2",
         "ionicons": "3.0.0",
         "pdfmake": "^0.1.36",
+        "plugin": "0.3.3",
         "rxjs": "5.5.2",
         "sw-toolbox": "3.6.0",
         "zone.js": "0.8.18"
@@ -68,7 +70,8 @@
             "cordova-plugin-file": {},
             "cordova-plugin-statusbar": {},
             "cordova-plugin-filepath": {},
-            "cordova-plugin-file-opener2": {}
+            "cordova-plugin-file-opener2": {},
+            "cordova-plugin-crop": {}
         },
         "platforms": [
             "android"
