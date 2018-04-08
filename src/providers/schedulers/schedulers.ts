@@ -95,6 +95,23 @@ addTemplate(scheduler: Scheduler){
         });
   }
 
+  loadSchedulers(){
+    var loadPromise = this.storage.get(this.scheduler_key);
+    loadPromise.then((schedulers)=>{
+      if(schedulers == null){
+        this.emptyList=true;
+      }
+      else if(schedulers.length == 0){
+        this.emptyList=true;
+      }
+      else{
+        this.emptyList=false;
+      }
+      this.scheds=schedulers;
+    })
+    return loadPromise;
+  }
+
   loadTemplates(){
     this.storage.get(this.template_key).then((val) => {
           this.templates=val;

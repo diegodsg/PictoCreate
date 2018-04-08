@@ -124,7 +124,7 @@
               </ion-card>
             </ion-col>
             <!--Add picto-->
-            <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center style="text-align: center">
+            <ion-col col-sm-12 col-md-3 col-lg-2 align-self-center style= "text-align: center">
                 <button ion-button color="primary" (click)="addNewItem(cat.controls.items);" type="button"><ion-icon name="add"></ion-icon>AÑADIR picto</button>
             </ion-col>
           </ion-row>
@@ -132,8 +132,8 @@
       </ion-card>
     </div>
   </form>
-  <button ion-button (click)="addNewCategory()" class="buttonAddCategory" >Añadir grupo</button><br><br>
-  
+  <button ion-button (click)="addNewCategory()" class="buttonAddCategory">Añadir grupo</button><br><br>
+
 <!--
   <pre>{{schedulerForm.value | json}}</pre>
 -->
@@ -141,5 +141,5 @@
 </ion-content>
 
 <ion-fab fixed bottom right margin-bottom margin-right>
-  <button type="button" ion-fab color="light" (click)="savePicto()" ><ion-icon name="checkmark"></ion-icon></button>
+  <button type="button" ion-fab color="light" (click)="saveAlert()" ><ion-icon name="checkmark"></ion-icon></button>
 </ion-fab>

@@ -10,7 +10,6 @@ import {HttpModule} from '@angular/http'
 //Pages
 import { HomePage } from '../pages/home/home'
 import { AboutPage } from '../pages/about/about'
-import { ListPage } from '../pages/list/list'
 import { SchedulerPage } from '../pages/scheduler/scheduler'
 import { SearchPictogramPage } from '../pages/search-pictogram/search-pictogram'
 import { PresentationPage } from '../pages/presentation/presentation'
@@ -40,14 +39,11 @@ import { Screenshot } from '@ionic-native/screenshot'
     MyApp,
     HomePage,
     AboutPage,
-    ListPage,
     SchedulerPage,
     SearchPictogramPage,
     PresentationPage,
     SchedulerTemplatesPage,
     SchedulerEditorPage,
-
-
   ],
   imports: [
     BrowserModule,
@@ -62,7 +58,6 @@ import { Screenshot } from '@ionic-native/screenshot'
     MyApp,
     HomePage,
     AboutPage,
-    ListPage,
     SchedulerPage,
     SearchPictogramPage,
     PresentationPage,

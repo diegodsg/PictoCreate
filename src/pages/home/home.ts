@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { NavController, AlertController, ActionSheetController,
          NavParams, ModalController, Modal,
          Platform } from 'ionic-angular';
@@ -27,8 +27,8 @@ declare var cordova: any;
 export class HomePage {
 
   pdfObj = null;
-
-  Imagen = 'assets/imgs/pictograma.jpg'
+  Imagen = 'assets/imgs/pictograma.jpg';
+  schedulers : Scheduler[];
 
   constructor(public navCtrl: NavController,
               public schedulersService: SchedulersProvider,
@@ -40,24 +40,86 @@ export class HomePage {
               private plt: Platform,
               private file: File,
               private fileOpener: FileOpener,
+              private zone: NgZone
               ){
     this.statusBar.backgroundColorByHexString('#2085c1');
+    console.log('viewDidLoad');
+    this.schedulersService.load();
+    this.schedulersService.loadTemplates();
+
+    let promise = this.schedulersService.loadSchedulers();
+    promise.then((val)=>{
+      if(val == null){
+        this.schedulersService.emptyList=true;
+      }
+      else if(val.length == 0){
+        this.schedulersService.emptyList=true;
+      }
+      else{
+        this.schedulersService.emptyList=false;
+      }
+        this.schedulersService.scheds = val;
+        this.schedulers=val;
+        console.log('scheds:::')
+        console.log(this.schedulers);
+    });
   }
 
   ionViewDidLoad(){
-    console.log(this.schedulersService.scheds);
 
+    this.zone.run(()=>{
+      this.schedulersService.load();
+      this.schedulersService.loadTemplates();
+    });
+
+    /*
+    let promise = this.schedulersService.loadSchedulers();
+    promise.then((val)=>{
+      if(val == null){
+        this.schedulersService.emptyList=true;
+      }
+      else if(val.length == 0){
+        this.schedulersService.emptyList=true;
+      }
+      else{
+        this.schedulersService.emptyList=false;
+      }
+        this.schedulersService.scheds = val;
+        this.schedulers=val;
+    });
+    */
   }
 
   ionViewWillEnter(){
-    this.schedulersService.load();
-    this.schedulersService.loadTemplates();
-
+    console.log('viewWillEnter');
+    this.zone.run(()=>{
+      this.schedulersService.load();
+      this.schedulersService.loadTemplates();
+    });
   }
 
   ionViewDidEnter(){
+    console.log('viewdidenter');
+    this.zone.run(()=>{
+      this.schedulersService.load();
+      this.schedulersService.loadTemplates();
+    });/*
     this.schedulersService.load();
     this.schedulersService.loadTemplates();
+    let promise = this.schedulersService.loadSchedulers();
+    promise.then((val)=>{
+      if(val == null){
+        this.schedulersService.emptyList=true;
+      }
+      else if(val.length == 0){
+        this.schedulersService.emptyList=true;
+      }
+      else{
+        this.schedulersService.emptyList=false;
+      }
+        this.schedulersService.scheds = val;
+        this.schedulers=val;
+    });*/
 
   }
 

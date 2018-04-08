@@ -18,17 +18,30 @@
   <ion-grid>
       <ion-row>
         <!-- New -->
-        <ion-col col-sm-12 col-md-4>
+        <ion-col col-sm-12 col-md-4 align-self-center style= "text-align: center">
+          <button ion-button (click)="loadCreateScheduler()">Crear nuevo</button>
+          <p>(En blanco)</p>
+          <!--</ion-card-content>
+
           <ion-card (click)="loadCreateScheduler()">
-            <img src = {{Image}} />
-            <p class = "templateTitle"> Nuevo Planificador </p>
+            <ion-title class = "templateTitle">Nuevo</ion-title>
+            <hr>
+            <ion-card-content class="cont">
+              <img class="preview" src ={{Image}}/>
           </ion-card>
+          -->
         </ion-col>
 
         <ion-col *ngFor="let template of templates" col-sm-12 col-md-4>
-          <ion-card (click)="selectTemplate(template)">
-            <img src = {{template.preview}} />
-            <p class = "templateTitle"> {{template.name}} </p>
+          <ion-card>
+            <ion-title class = "templateTitle">{{template.name}}</ion-title>
+            <hr>
+            <div class="imageCont">
+              <img class="imagePrev" src = {{template.preview}} (click)="selectTemplate(template)"/>
+            </div>
+              <ion-fab fixed clear top right>
+                <button  class="deletePicto" type="button" ion-fab mini color="light" (click)="deleteTemplate(template)" ><ion-icon name="close" ></ion-icon></button>
+              </ion-fab>
           </ion-card>
         </ion-col>
 

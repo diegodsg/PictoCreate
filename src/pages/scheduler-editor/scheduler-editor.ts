@@ -1,6 +1,6 @@
 import { IonicPage, NavController, NavParams,
          ModalController, Modal, FabContainer,
-         ToastController} from 'ionic-angular';
+         ToastController, AlertController} from 'ionic-angular';
 import { Component, OnChanges, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Scheduler } from '../../models/data-model';
@@ -63,7 +63,8 @@ export class SchedulerEditorPage {
               fab: FabContainer,
               public toastCtrl: ToastController,
               public schedulerService: SchedulersProvider,
-              private screenshot: Screenshot) {
+              private screenshot: Screenshot,
+              private alertCtrl: AlertController) {
 
     this.edit = this.navParams.get("isEdit");
 
@@ -251,6 +252,44 @@ export class SchedulerEditorPage {
     toast.present();
   }
 
+  private presentToastBottom(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 2000,
+      position: 'bottom'
+    });
+    toast.present();
+  }
+
+  saveAlert(){
+    let saveConfirm = this.alertCtrl.create({
+      title: 'Guardar',
+      message: '¿Terminar y guardar este planificador?',
+      buttons: [
+        {
+          text: 'Guardar',
+          handler: () => {
+          this.presentToastBottom("Guardando planificador");
+          saveConfirm.dismiss();
+          let TIME_IN_MS = 500;
+          let hideFooterTimeout = setTimeout( () => {
+            this.savePicto();
+          }, TIME_IN_MS);
+          }
+        },
+        {
+          role: 'cancel',
+          text: 'Cancelar',
+          handler: () => {
+          }
+        }
+      ]
+    });
+    saveConfirm.present();
+  }
+
+
+
   savePicto(){
     //check values.
     if(this.schedulerForm.get('name').value==""){
@@ -266,6 +305,7 @@ export class SchedulerEditorPage {
           this.scheduler = this.schedulerForm.value;
           //this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
           this.scheduler.preview = res.filePath;
+          //this.scheduler.preview = 'assets/imgs/plantillaV.png'
           console.log(this.scheduler);
           if(this.edit == 0 || this.edit==3 || this.edit==undefined){
               this.scheduler.id = id;
@@ -277,6 +317,7 @@ export class SchedulerEditorPage {
           else if(this.edit== 2){
               this.schedulerService.addTemplate(this.scheduler);
           }
+              this.schedulerService.load();
               this.navCtrl.setRoot(HomePage);
 
       });

@@ -34,7 +34,6 @@ export class SchedulerTemplatesPage {
 
   Image = 'assets/imgs/Plantilla_1.PNG'
 
-
   loadCreateScheduler(){
     this.viewCtrl.dismiss('Crear de cero');
     this.navCtrl.setRoot(HomePage);
@@ -57,6 +56,17 @@ export class SchedulerTemplatesPage {
     this.navCtrl.push(SchedulerEditorPage,{
       isEdit : 2,
     });
+  }
+
+  deleteTemplate(template: Scheduler){
+    this.schedulersService.deleteTemplate(template.id);
+    let aux = [];
+    for(let i = 0; i<this.templates.length;i++){
+      if(this.templates[i].id != template.id){
+        aux.push(template);
+      }
+    }
+    this.templates = aux;
   }
 
 

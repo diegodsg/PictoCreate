@@ -1,14 +1,19 @@
 <ion-header>
   <ion-navbar color="primary">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>PictoCreate</ion-title>
-    <ion-buttons end>
-      <button ion-button icon-only (click)="refreshHomePage()">
-        <ion-icon name="refresh"></ion-icon>
-      </button>
-    </ion-buttons>
+      <!--
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      -->
+      <ion-row margin-left>
+        <img src="assets/icon/icon.png" class="logo"/>
+        <ion-title>PictoCreate</ion-title>
+
+          <button ion-button icon-only align-self-center (click)="refreshHomePage()" class="button">
+            <ion-icon name="refresh"></ion-icon>
+          </button>
+
+    </ion-row>
   </ion-navbar>
 </ion-header>
 
@@ -19,26 +24,33 @@
         <ion-col *ngFor="let scheduler of schedulersService.scheds" col-sm-12 col-md-4 col-lg-3>
           <ion-card>
             <p class = "schedulerTitle">{{scheduler.name}}</p>
+
             <hr>
-              <img class="preview" src = {{scheduler.preview}} (click)="openScheduler(scheduler)"/>
+            <!-- Image -->
+            <div class="imageCont" (click)="openScheduler(scheduler)">
+                <img class="imagePrev" src = {{scheduler.preview}}/>
+            </div>
             <hr>
+
+            <!-- Buttons -->
             <ion-row class="cardButtons">
               <ion-col col-4>
-                <button ion-button full clear (click)=editScheduler(scheduler)>
+                <button ion-button full clear class="cardButton" (click)=editScheduler(scheduler)>
                   <ion-icon name="create"></ion-icon>
                 </button>
               </ion-col>
               <ion-col col-4>
-                <button ion-button full clear (click)=shareScheduler(scheduler)>
+                <button ion-button full clear class="cardButton" (click)=shareScheduler(scheduler)>
                   <ion-icon name="share"></ion-icon>
                 </button>
               </ion-col>
               <ion-col col-4>
-                <button ion-button full clear (click)=deleteScheduler(scheduler.id)>
+                <button ion-button full clear class="cardButton" (click)=deleteScheduler(scheduler.id)>
                   <ion-icon name="trash"></ion-icon>
                 </button>
               </ion-col>
             </ion-row>
+
           </ion-card>
         </ion-col>
       </ion-row>
