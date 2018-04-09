@@ -25,7 +25,6 @@ export class PresentationPage {
   }
 
   ionViewDidLoad() {
-    this.slides.effect = 'coverflow';
     this.loadFaved();
     console.log(this.favedItems);
   }

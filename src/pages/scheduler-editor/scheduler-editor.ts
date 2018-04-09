@@ -269,12 +269,16 @@ export class SchedulerEditorPage {
         {
           text: 'Guardar',
           handler: () => {
-          this.presentToastBottom("Guardando planificador");
-          saveConfirm.dismiss();
-          let TIME_IN_MS = 500;
-          let hideFooterTimeout = setTimeout( () => {
-            this.savePicto();
-          }, TIME_IN_MS);
+
+              this.presentToastBottom("Guardando planificador");
+              saveConfirm.dismiss();
+              let TIME_IN_MS = 500;
+              let hideFooterTimeout = setTimeout( () => {
+                this.savePicto();
+              }, TIME_IN_MS);
+
+              //this.savePicto(); //EraseMe
+
           }
         },
         {
@@ -287,8 +291,6 @@ export class SchedulerEditorPage {
     });
     saveConfirm.present();
   }
-
-
 
   savePicto(){
     //check values.
@@ -306,7 +308,7 @@ export class SchedulerEditorPage {
           //this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
           this.scheduler.preview = res.filePath;
           //this.scheduler.preview = 'assets/imgs/plantillaV.png'
-          console.log(this.scheduler);
+          //console.log(this.scheduler);
           if(this.edit == 0 || this.edit==3 || this.edit==undefined){
               this.scheduler.id = id;
               this.schedulerService.addScheduler(this.scheduler);
@@ -318,9 +320,35 @@ export class SchedulerEditorPage {
               this.schedulerService.addTemplate(this.scheduler);
           }
               this.schedulerService.load();
-              this.navCtrl.setRoot(HomePage);
+              this.navCtrl.pop();
 
       });
     }
   }
+
+/*
+  onViewWillLeave(){
+
+    let exitConfirm = this.alertCtrl.create({
+      title: 'Abandonar',
+      message: 'Si terminas sin guardar el planificador, se perderan todos los datos.',
+      buttons: [
+        {
+          text: 'Abandonar',
+          handler: () => {
+          this.navCtrl.pop();
+          }
+        },
+        {
+          role: 'cancel',
+          text: 'Cancelar',
+          handler: () => {
+          }
+        }
+      ]
+    });
+    exitConfirm.present();
+    return false;
+  }
+*/
 }

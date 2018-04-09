@@ -13,21 +13,17 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="card padding">
 
   <ion-grid>
     <ion-row>
-      <ion-col col-4 offset-4>
-      <ion-card>
-        <ion-slides>
+      <ion-col col-12>
+        <ion-slides spaceBetween="-10" slidesPerView="3">
           <ion-slide *ngFor="let item of favedItems">
-            <div class="coverflowCard">
                 <img src="{{item.itemImage}}"/>
                 <p class="presentationText">{{item.itemText}}</p>
-            </div>
           </ion-slide>
         </ion-slides>
-      </ion-card>
       </ion-col>
     </ion-row>
 

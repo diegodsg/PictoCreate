@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, App } from 'ionic-angular';
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor';
 import { HomePage } from '../../pages/home/home';
@@ -25,19 +25,18 @@ export class SchedulerTemplatesPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public viewCtrl: ViewController,
+              public appCtrl: App,
               public schedulersService: SchedulersProvider) {
 
-                this.templates = this.navParams.get("templates");
-
-
+              this.templates = this.navParams.get("templates");
   }
 
   Image = 'assets/imgs/Plantilla_1.PNG'
 
   loadCreateScheduler(){
     this.viewCtrl.dismiss('Crear de cero');
-    this.navCtrl.setRoot(HomePage);
-    this.navCtrl.push(SchedulerEditorPage, {
+    //this.navCtrl.setRoot(HomePage);
+    this.appCtrl.getRootNav().push(SchedulerEditorPage, {
       isEdit: 0,
     });
   }
@@ -45,8 +44,8 @@ export class SchedulerTemplatesPage {
   selectTemplate(scheduler: Scheduler){
     //this.viewCtrl.dismiss(scheduler);
     this.viewCtrl.dismiss('Plantilla seleccionada');
-    this.navCtrl.setRoot(HomePage);
-    this.navCtrl.push(SchedulerEditorPage, {
+    //this.navCtrl.setRoot(HomePage);
+    this.appCtrl.getRootNav().push(SchedulerEditorPage, {
       isEdit : 3,
       scheduler: scheduler
     });
