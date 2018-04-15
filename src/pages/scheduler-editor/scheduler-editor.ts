@@ -191,10 +191,16 @@ export class SchedulerEditorPage {
     let modal: Modal = this.modalCtrl.create(SearchPictogramPage, undefined, {cssClass: "modal-fullscreen"});
     modal.present();
     modal.onDidDismiss((data)=>{
-      console.log(data);
       if(data != null){
         /*patchValue({image: data.url})*/
+        let path = data.url.substr(0,1);
+        let fromArasaac : boolean = path == 'r';
         let item = <FormArray> this.categories.controls[i].get('items');
+
+        if(fromArasaac == false){
+          item.controls[j].patchValue({isPersonal: true});
+        }
+
         item.controls[j].patchValue({itemImage: data.url});
       }
     })

@@ -23,6 +23,7 @@ export class Item {
   itemText: '';
   itemImage: 'assets/imgs/placeholder_pictogram.png';
   itemFav: boolean = false;
+  isPersonal: boolean = false;
 }
 
 @Injectable()

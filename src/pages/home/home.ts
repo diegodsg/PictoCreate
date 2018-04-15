@@ -15,6 +15,8 @@ import { StatusBar } from '@ionic-native/status-bar'
 //PDF generation
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
+import { FilePath } from '@ionic-native/file-path';
+
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -30,6 +32,12 @@ export class HomePage {
   Imagen = 'assets/imgs/pictograma.jpg';
   schedulers : Scheduler[];
 
+  images : any[];
+
+  sampleImage : any;
+
+
+
   constructor(public navCtrl: NavController,
               public schedulersService: SchedulersProvider,
               private statusBar: StatusBar,
@@ -40,7 +48,8 @@ export class HomePage {
               private plt: Platform,
               private file: File,
               private fileOpener: FileOpener,
-              private zone: NgZone
+              private zone: NgZone,
+              private filePath: FilePath
               ){
     this.statusBar.backgroundColorByHexString('#2085c1');
     console.log('viewDidLoad');
@@ -146,7 +155,7 @@ export class HomePage {
           icon: 'document',
           handler: () => {
             console.log('a PDF from Scheduler '+scheduler.id+' should be generated.');
-            //this.createPdf(scheduler);
+            this.createPdf(scheduler);
             //this.downloadPdf();
           }
         },{
@@ -213,7 +222,7 @@ export class HomePage {
   }
 
 
-/*
+
   //Create PDF
   createPdf(scheduler: Scheduler) {
 
@@ -230,41 +239,114 @@ export class HomePage {
   let rows = [];
 
   for(let i = 0; i<scheduler.categories.length; i++){
-    console.log(scheduler.categories[i].items.length);
     for(let j = 0; j<scheduler.categories[i].items.length; j++){
       let txt = scheduler.categories[i].items[j].itemText;
       text.text = txt;
       let src :string = scheduler.categories[i].items[j].itemImage;
       image.image = src;
-      //rows.push(image);
-      rows.push(text);
-      console.log(rows);
+
+
+/*
+      let promise = this.filePath.resolveNativePath(src);
+      promise.then(filepath=>{
+        console.log(filepath);
+      });
+
+      promise.catch(err=>{
+        console.log(err);
+      });
+*/
+
+      let path = image.image.substr(0, image.image.lastIndexOf('/') + 1);
+      let fileName = image.image.substr(image.image.lastIndexOf('/')+1, image.image.length);
+
+    //  let path2 = path.substr(0, path.lastIndexOf('/'));
+      //let path3 = path2.substr(0, path2.lastIndexOf('/')+1);
+      //console.log('path2: '+path3);
+/*
+      let p3 = this.file.checkDir(path2, 'arasaac');
+      p3.then(res => {
+        console.log(res);
+      })
+      p3.catch(err=>{
+        console.log(err);
+      })
+*/
+
+      console.log('file: '+image.image);
+      console.log('path: '+path+', fileName: '+fileName);
+      console.log("data directory is: "+this.file.dataDirectory);
+      console.log("appStorage directory is: "+this.file.applicationStorageDirectory);
+
+      /*let paht = this.file.applicationStorageDirectory;
+
+      let pathG= this.file.applicationStorageDirectory.substr(0, this.file.applicationStorageDirectory.lastIndexOf('/')+1);
+
+      console.log('Full path: '+this.file.applicationStorageDirectory);
+      console.log('Trimmed: '+ pathG);*/
+
+
+/*
+      //let p4 = this.file.listDir('file:///data/user/0/', 'io.ionic.starter');
+      let p4 = this.file.listDir('file:///android_asset/www/res/img/', 'arasaac');
+
+      p4.then(res=>{
+        console.log('dir...')
+        console.log(res);
+      })
+
+      p4.catch(err=>{
+        console.log(err);
+      })
+
+*/
+
+  let promise2 =
+      this.file.readAsDataURL('file:///android_asset/www/'+path, fileName);
+      promise2.then(dataURL=>{
+
+        this.sampleImage=dataURL;
+
+
+        var docDefinition = {
+          content: [
+              {
+          			image: this.sampleImage,
+          		},
+          ],
+          pageOrientation: 'landscape',
+        }
+
+        this.pdfObj = pdfMake.createPdf(docDefinition);
+
+
+        console.log(dataURL);
+        image.image = dataURL;
+        rows.push(image);
+        this.downloadPdf(scheduler.name);
+      })
+
+      promise2.catch(err=>{
+        console.log(err)
+      })
+
     }
   }
 
 
-  var docDefinition = {
-    content: [
-      {
-    			image: coded,
-    			width: 150
-    		},
-    ],
-    pageOrientation: 'landscape',
-  }
 
-  this.pdfObj = pdfMake.createPdf(docDefinition);
 }
 
-downloadPdf() {
+downloadPdf(schedulerName) {
   if (this.plt.is('cordova')) {
     this.pdfObj.getBuffer((buffer) => {
       var blob = new Blob([buffer], { type: 'application/pdf' });
 
+      let pdfName = schedulerName+'.pdf';
       // Save the PDF to the data Directory of our App
-      this.file.writeFile(this.file.dataDirectory, 'myletter.pdf', blob, { replace: true }).then(fileEntry => {
+      this.file.writeFile(this.file.dataDirectory, pdfName, blob, { replace: true }).then(fileEntry => {
         // Open the PDf with the correct OS tools
-        this.fileOpener.open(this.file.dataDirectory + 'myletter.pdf', 'application/pdf');
+        this.fileOpener.open(this.file.dataDirectory + pdfName, 'application/pdf');
 
       })
     });
@@ -275,5 +357,4 @@ downloadPdf() {
 }
 
 
-*/
 }

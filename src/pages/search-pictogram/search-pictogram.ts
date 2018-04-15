@@ -253,23 +253,6 @@ public takePicture(sourceType) {
           let imageData: UserImage = new UserImage();
           let imageName = this.createFileName()
           this.copyFileToLocalDir(correctPath, currentName, imageName, imageData);
-/*
-          let path = correctPath+'/'+currentName;
-
-          console.log('path: '+correctPath);
-          console.log('name: '+currentName);
-
-          imageData.name = imageName;
-          imageData.url  = path;
-          this.userImagesService.addImage(imageData);
-          this.userImagesService.saveImages();
-          this.onSearch("");
-
-          this.camera.cleanup();
-
-
-*/
-
 
         });
     } else {
@@ -277,20 +260,6 @@ public takePicture(sourceType) {
       var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
       var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
       this.copyFileToLocalDir(correctPath, currentName, this.createFileName(), imageData);
-/*
-      let path = correctPath+'/'+currentName;
-
-      console.log('path: '+correctPath);
-      console.log('name: '+currentName);
-
-      imageData.name = currentName;
-      this.userImagesService.addImage(imageData);
-      this.userImagesService.saveImages();
-      this.onSearch("");
-
-*/
-
-
     }
   }, (err) => {
     this.presentToast('Ha habido algún problema seleccionando la imagen.');
@@ -335,7 +304,6 @@ let alert = this.alertCtrl.create({
           this.lastImage = image.name;
           image.url = success.nativeURL;
           image.id = id;
-
           this.userImagesService.addImage(image);
           this.userImagesService.saveImages();
           this.onSearch("");
@@ -350,7 +318,6 @@ let alert = this.alertCtrl.create({
 });
 alert.present();
 }
-
 
 private presentToast(text) {
   let toast = this.toastCtrl.create({

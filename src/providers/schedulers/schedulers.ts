@@ -97,6 +97,7 @@ addTemplate(scheduler: Scheduler){
 
   loadSchedulers(){
     var loadPromise = this.storage.get(this.scheduler_key);
+/*
     loadPromise.then((schedulers)=>{
       if(schedulers == null){
         this.emptyList=true;
@@ -109,6 +110,7 @@ addTemplate(scheduler: Scheduler){
       }
       this.scheds=schedulers;
     })
+    */
     return loadPromise;
   }
 
