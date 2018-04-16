@@ -8,7 +8,7 @@ import { SchedulerPage } from '../../pages/scheduler/scheduler';
 import { SchedulerTemplatesPage } from '../../pages/scheduler-templates/scheduler-templates'
 import { SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor'
 
-import { Scheduler } from '../../models/data-model';
+import { Scheduler, Item } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
 
 
@@ -32,11 +32,9 @@ export class HomePage {
   Imagen = 'assets/imgs/pictograma.jpg';
   schedulers : Scheduler[];
 
-  images : any[];
+  images : string[];
 
   sampleImage : any;
-
-
 
   constructor(public navCtrl: NavController,
               public schedulersService: SchedulersProvider,
@@ -69,7 +67,6 @@ export class HomePage {
       }
         this.schedulersService.scheds = val;
         this.schedulers=val;
-        console.log('scheds:::')
         console.log(this.schedulers);
     });
   }
@@ -240,101 +237,56 @@ export class HomePage {
 
   for(let i = 0; i<scheduler.categories.length; i++){
     for(let j = 0; j<scheduler.categories[i].items.length; j++){
-      let txt = scheduler.categories[i].items[j].itemText;
-      text.text = txt;
-      let src :string = scheduler.categories[i].items[j].itemImage;
-      image.image = src;
 
+      let item: Item = scheduler.categories[i].items[j];
 
-/*
-      let promise = this.filePath.resolveNativePath(src);
-      promise.then(filepath=>{
-        console.log(filepath);
-      });
+      let txt = item.itemText;
+      let src :string = item.itemImage;
+      let isPersonal: boolean = item.isPersonal;
 
-      promise.catch(err=>{
-        console.log(err);
-      });
-*/
+      let path = src.substr(0, src.lastIndexOf('/') + 1);
+      let fileName = src.substr(src.lastIndexOf('/')+1, src.length);
 
-      let path = image.image.substr(0, image.image.lastIndexOf('/') + 1);
-      let fileName = image.image.substr(image.image.lastIndexOf('/')+1, image.image.length);
+      if(isPersonal == false){
+        path = 'file:///android_asset/www/'+path;
+      }
 
-    //  let path2 = path.substr(0, path.lastIndexOf('/'));
-      //let path3 = path2.substr(0, path2.lastIndexOf('/')+1);
-      //console.log('path2: '+path3);
-/*
-      let p3 = this.file.checkDir(path2, 'arasaac');
-      p3.then(res => {
-        console.log(res);
-      })
-      p3.catch(err=>{
-        console.log(err);
-      })
-*/
-
-      console.log('file: '+image.image);
+      //console.log('file: '+src);
       console.log('path: '+path+', fileName: '+fileName);
-      console.log("data directory is: "+this.file.dataDirectory);
-      console.log("appStorage directory is: "+this.file.applicationStorageDirectory);
 
-      /*let paht = this.file.applicationStorageDirectory;
+      let promiseB64 = this.file.readAsDataURL(path, fileName);
+          promiseB64.then(dataURL=>{
+            console.log(dataURL);
+            this.images.push(dataURL);
+            //this.sampleImage=dataURL;
 
-      let pathG= this.file.applicationStorageDirectory.substr(0, this.file.applicationStorageDirectory.lastIndexOf('/')+1);
+          });
 
-      console.log('Full path: '+this.file.applicationStorageDirectory);
-      console.log('Trimmed: '+ pathG);*/
-
-
-/*
-      //let p4 = this.file.listDir('file:///data/user/0/', 'io.ionic.starter');
-      let p4 = this.file.listDir('file:///android_asset/www/res/img/', 'arasaac');
-
-      p4.then(res=>{
-        console.log('dir...')
-        console.log(res);
-      })
-
-      p4.catch(err=>{
-        console.log(err);
-      })
-
-*/
-
-  let promise2 =
-      this.file.readAsDataURL('file:///android_asset/www/'+path, fileName);
-      promise2.then(dataURL=>{
-
-        this.sampleImage=dataURL;
-
-
-        var docDefinition = {
-          content: [
-              {
-          			image: this.sampleImage,
-          		},
-          ],
-          pageOrientation: 'landscape',
-        }
-
-        this.pdfObj = pdfMake.createPdf(docDefinition);
-
-
-        console.log(dataURL);
-        image.image = dataURL;
-        rows.push(image);
-        this.downloadPdf(scheduler.name);
-      })
-
-      promise2.catch(err=>{
-        console.log(err)
-      })
+          promiseB64.catch(err=>{
+            console.log(err)
+          });
 
     }
   }
 
+  this.generatePDF(this.images, scheduler.name);
 
+}
 
+generatePDF(images, pdfName){
+  console.log(this.images);
+  /*
+  var docDefinition = {
+    content: [
+        {
+          image: images[0],
+        },
+    ],
+    pageOrientation: 'landscape',
+  }
+  this.pdfObj = pdfMake.createPdf(docDefinition);
+  this.downloadPdf(pdfName);
+*/
 }
 
 downloadPdf(schedulerName) {

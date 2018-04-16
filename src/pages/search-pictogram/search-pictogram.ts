@@ -74,7 +74,7 @@ export class SearchPictogramPage {
 	 		});
 
 		storage.get("_favourites").then((data) => {
-			console.log(data);
+			//console.log(data);
 			if(data !== null){
 				this.favourites = data;
 				this.onSearch("");
@@ -160,8 +160,9 @@ export class SearchPictogramPage {
   				this.results.push(this.temp[j]);
   				this.cnt++;
   			}
+        /*
         console.log('this temp:');
-        console.log(this.temp);
+        console.log(this.temp);*/
   	}
 
   	canLoadMore(){
@@ -271,7 +272,7 @@ private createFileName() {
   var d = new Date(),
   n = d.getTime(),
   newFileName =  n + ".jpg";
-  console.log('newFileName: '+newFileName);
+  //console.log('newFileName: '+newFileName);
   return newFileName;
 }
 

@@ -89,9 +89,6 @@ export class SchedulerEditorPage {
       this.createForm();
       this.pageTitle="Crear Planificador";
     }
-
-    console.log(this.edit);
-
   }
 
   createForm(){
@@ -164,6 +161,7 @@ export class SchedulerEditorPage {
         itemText: [''],
         itemImage: ['assets/imgs/placeholder_pictogram.png'],
         itemFav:[false],
+        isPersonal:[false]
     }))
   }
 
@@ -180,7 +178,6 @@ export class SchedulerEditorPage {
     else{
       control.controls[index].patchValue({itemFav: false});
     }
-    console.log(control.controls[index].get("itemFav").value);
   }
 
   get categories(): FormArray {
@@ -202,6 +199,8 @@ export class SchedulerEditorPage {
         }
 
         item.controls[j].patchValue({itemImage: data.url});
+        console.log(item.controls[j]);
+
       }
     })
   }
@@ -314,7 +313,6 @@ export class SchedulerEditorPage {
           //this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
           this.scheduler.preview = res.filePath;
           //this.scheduler.preview = 'assets/imgs/plantillaV.png'
-          //console.log(this.scheduler);
           if(this.edit == 0 || this.edit==3 || this.edit==undefined){
               this.scheduler.id = id;
               this.schedulerService.addScheduler(this.scheduler);
