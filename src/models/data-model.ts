@@ -33,8 +33,29 @@ export class UserImage{
   url = '';
 }
 
-/*
-export class SchedulerListItem {
-  id = '';
-  preview = '';
-}*/
+
+//PDF data export structures
+
+@Injectable()
+export class pdfImage{
+  image: string = '';
+  width: 100;
+}
+
+@Injectable()
+export class pdfText{
+  text: string = '';
+  alignment: 'centered';
+  pageBreak: string = '';
+
+}
+
+@Injectable()
+export class pdfImageRow{
+  columns: pdfImage[];
+}
+
+@Injectable()
+export class pdfTextRow{
+  columns: pdfText[];
+}

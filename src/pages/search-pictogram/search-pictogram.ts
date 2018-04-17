@@ -140,7 +140,6 @@ export class SearchPictogramPage {
   				}
   				break;
   			case "2":
-
           for(let i = 0; i < this.userImagesService.userImages.length; i++){
   					let v = this.userImagesService.userImages[i].name;
   					//if(value.toLowerCase().indexOf(this.searchbar.value.toLowerCase()) >= 0){

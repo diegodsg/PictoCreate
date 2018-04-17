@@ -8,7 +8,7 @@ import { SchedulerPage } from '../../pages/scheduler/scheduler';
 import { SchedulerTemplatesPage } from '../../pages/scheduler-templates/scheduler-templates'
 import { SchedulerEditorPage } from '../../pages/scheduler-editor/scheduler-editor'
 
-import { Scheduler, Item } from '../../models/data-model';
+import { Scheduler, Item, pdfText, pdfImage, pdfTextRow, pdfImageRow } from '../../models/data-model';
 import { StatusBar } from '@ionic-native/status-bar'
 
 
@@ -77,23 +77,6 @@ export class HomePage {
       this.schedulersService.load();
       this.schedulersService.loadTemplates();
     });
-
-    /*
-    let promise = this.schedulersService.loadSchedulers();
-    promise.then((val)=>{
-      if(val == null){
-        this.schedulersService.emptyList=true;
-      }
-      else if(val.length == 0){
-        this.schedulersService.emptyList=true;
-      }
-      else{
-        this.schedulersService.emptyList=false;
-      }
-        this.schedulersService.scheds = val;
-        this.schedulers=val;
-    });
-    */
   }
 
   ionViewWillEnter(){
@@ -109,24 +92,7 @@ export class HomePage {
     this.zone.run(()=>{
       this.schedulersService.load();
       this.schedulersService.loadTemplates();
-    });/*
-    this.schedulersService.load();
-    this.schedulersService.loadTemplates();
-    let promise = this.schedulersService.loadSchedulers();
-    promise.then((val)=>{
-      if(val == null){
-        this.schedulersService.emptyList=true;
-      }
-      else if(val.length == 0){
-        this.schedulersService.emptyList=true;
-      }
-      else{
-        this.schedulersService.emptyList=false;
-      }
-        this.schedulersService.scheds = val;
-        this.schedulers=val;
-    });*/
-
+    });
   }
 
   openScheduler(scheduler : Scheduler){
@@ -200,7 +166,6 @@ export class HomePage {
     });
 
     deleteConfirm.present();
-
   }
 
   editScheduler(scheduler: Scheduler){
@@ -218,75 +183,84 @@ export class HomePage {
     modal.present();
   }
 
-
-
   //Create PDF
   createPdf(scheduler: Scheduler) {
 
-  let image = {
-    image: '',
-    width: 100
-  }
+  let content = []; //PDF structure
+  let imageRow : pdfImageRow;
+  let iRow = [];
 
-  let text = {
-    text: '',
-    width: 100
-  }
-
-  let rows = [];
+  let textRow : pdfTextRow;
+  let tRow = [];
 
   for(let i = 0; i<scheduler.categories.length; i++){
+
     for(let j = 0; j<scheduler.categories[i].items.length; j++){
 
+      //Obtain url and image text
       let item: Item = scheduler.categories[i].items[j];
-
       let txt = item.itemText;
       let src :string = item.itemImage;
       let isPersonal: boolean = item.isPersonal;
 
+      //Obtain path+filename to use File's readAsDataURL
       let path = src.substr(0, src.lastIndexOf('/') + 1);
       let fileName = src.substr(src.lastIndexOf('/')+1, src.length);
 
+      //if it's from arasaac, add the full path
       if(isPersonal == false){
         path = 'file:///android_asset/www/'+path;
       }
 
-      //console.log('file: '+src);
-      console.log('path: '+path+', fileName: '+fileName);
-
+      //generate the B64 string from the path+filename
       let promiseB64 = this.file.readAsDataURL(path, fileName);
-          promiseB64.then(dataURL=>{
-            console.log(dataURL);
-            this.images.push(dataURL);
-            //this.sampleImage=dataURL;
 
-          });
+      let itemImage: pdfImage;
+      let itemText: pdfText;
 
-          promiseB64.catch(err=>{
-            console.log(err)
-          });
+      promiseB64.then(dataURL=>{
+        itemImage.image = dataURL;
+        itemText.text = txt;
+        if((j+1)%6!=0){
+          iRow.push(itemImage);
+          tRow.push(itemText);
+        }else{
+          iRow.push(itemImage);
+          itemText.pageBreak= 'after';
+          tRow.push(itemText);
+          imageRow.columns = iRow;
+          textRow.columns = tRow;
+          content.push(imageRow);
+          content.push(textRow);
+        }
+
+      });
+
+      promiseB64.catch(err=>{
+        console.log(err)
+      });
 
     }
   }
 
-  this.generatePDF(this.images, scheduler.name);
+  this.generatePDF(content, scheduler.name);
 
 }
 
-generatePDF(images, pdfName){
+generatePDF(content, pdfName){
   console.log(this.images);
-  /*
+
   var docDefinition = {
-    content: [
-        {
-          image: images[0],
-        },
-    ],
+    content: content,
     pageOrientation: 'landscape',
+    pageMargins: [40,40,40,40],
+    defaultStyle: {
+      columnGap: 30
+    }
   }
   this.pdfObj = pdfMake.createPdf(docDefinition);
   this.downloadPdf(pdfName);
-*/
+
 }
 
 downloadPdf(schedulerName) {
