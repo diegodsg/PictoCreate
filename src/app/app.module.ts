@@ -34,6 +34,8 @@ import { SchedulersProvider } from '../providers/schedulers/schedulers'
 import { UserImagesProvider } from '../providers/user-images/user-images';
 import { Screenshot } from '@ionic-native/screenshot'
 
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -63,7 +65,6 @@ import { Screenshot } from '@ionic-native/screenshot'
     PresentationPage,
     SchedulerTemplatesPage,
     SchedulerEditorPage,
-
   ],
   providers: [
     StatusBar,
@@ -79,6 +80,7 @@ import { Screenshot } from '@ionic-native/screenshot'
     HttpClientModule,
     UserImagesProvider,
     Screenshot,
+    SocialSharing
   ]
 })
 export class AppModule {}

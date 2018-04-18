@@ -17,6 +17,9 @@ import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import { FilePath } from '@ionic-native/file-path';
 
+//File-sharing
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -53,7 +56,8 @@ export class HomePage {
               private fileOpener: FileOpener,
               private zone: NgZone,
               private filePath: FilePath,
-              public toastCtrl: ToastController
+              public toastCtrl: ToastController,
+              private socialSharing: SocialSharing
               ){
     this.statusBar.backgroundColorByHexString('#2085c1');
     console.log('viewDidLoad');
@@ -130,7 +134,7 @@ export class HomePage {
           }
         },{
           text: 'Exportar como Archivo',
-          icon: 'code-download',
+          icon: 'code',
           handler: () => {
             console.log('export as file');
             this.presentToast("Generando archivo...");
@@ -186,19 +190,8 @@ export class HomePage {
     modal.present();
   }
 
-  //Create PDF
-
-
+  //Take all images from the scheduler and fill a base64 array of images
   createPdf(scheduler: Scheduler) {
-/*
-  let content = []; //PDF structure
-  let imageRow : pdfImageRow = new pdfImageRow();
-  let iRow = [];
-
-  let textRow : pdfTextRow = new pdfTextRow();
-  let tRow = [];
-*/
-
   var promises = [];
 
   for(let i = 0; i<scheduler.categories.length; i++){
@@ -242,12 +235,14 @@ export class HomePage {
 
 }
 
+//take a bunch of base64 images and their respective text and create the body structure of the pdf
 createBody(images, texts, pdfName){
   let imgRow = [];
   let txtRow = [];
-  console.log('images: '+images.length+' texts: '+texts.length);
+
   if(images.length==texts.length){
     let i=0;
+    //take the b64 image array and pop it in a "pdf-formatted array"
     while(images.length>0){
       let imageItem = {
       width: 100,
@@ -259,6 +254,7 @@ createBody(images, texts, pdfName){
       i++;
     }
     i=0;
+    //same as before with the text
     while(texts.length>0){
       let textItem = {
       text: texts.pop(),
@@ -273,54 +269,63 @@ createBody(images, texts, pdfName){
       i++;
     }
 
+    //content stores the whole body of the pdf document
     var content = [];
 
+    //we first create and push the scheduler title
     let title = {
 			text: pdfName,
 			style: 'header',
       marginBottom: 20
 		};
-
     content.push(title);
 
-    let elements = imgRow.length;
-
-    let img = [];
-    let text = [];
+    //the plan is pushing images/texts in rows of 6
+    //then we need to break to the next page each 3 rows
     let pageBreak = 0;
-
     let pageBreaker = {
       text: ' ',
       pageBreak: "after",
       width: 0
     }
 
+    //these variables will store a row of 6
+    let img = [];
+    let text = [];
+
     let count = 0;
-    let totalItems = imgRow.length;
+    let totalItems = imgRow.length; //this one won't change
+    let elements = imgRow.length; //regressive count
+
     while(count<totalItems){
+      //fill columns 1-5
       if((count+1)%6!=0){
         img.push(imgRow.pop());
         text.push(txtRow.pop());
       }
+      //when we hit the 6th column, we push it into the content
       else{
         img.push(imgRow.pop());
         text.push(txtRow.pop());
-
+        //before pushing these into content, we need to "format" everything again.
         let iR = {
           columns: img
         }
-
         let tR = {
           columns: text
         }
 
+        //this is some magic, if you push the row directly it overwrites it...
+        //So we turn it into a string to turn it into an object again... Well, now it works.
         content.push(JSON.parse(JSON.stringify(iR)));
         content.push(JSON.parse(JSON.stringify(tR)));
 
+        //empty the used arrays
         img.length=0;
         text.length=0;
         pageBreak++;
       }
+      //if the scheduler ends and we haven't hit the 6th column, we need to push the last remaining
       if((count+1)%6!=0 && elements==1){
         let iR = {
           columns: img
@@ -329,10 +334,12 @@ createBody(images, texts, pdfName){
           columns: text
         }
 
+        //more of the same magic...
         content.push(JSON.parse(JSON.stringify(iR)));
         content.push(JSON.parse(JSON.stringify(tR)));
       }
 
+      //every 3 rows... pageBreaker
       if(pageBreak==3){
         content.push(JSON.parse(JSON.stringify(pageBreaker)));
         pageBreak=0;
@@ -349,6 +356,7 @@ createBody(images, texts, pdfName){
   }
 }
 
+//create the pdf structure with the content and the name
 generatePDF(content, pdfName){
   console.log(content);
   var docDefinition = {
@@ -374,7 +382,6 @@ downloadPdf(schedulerName) {
   if (this.plt.is('cordova')) {
     this.pdfObj.getBuffer((buffer) => {
       var blob = new Blob([buffer], { type: 'application/pdf' });
-
       let pdfName = schedulerName+'.pdf';
       // Save the PDF to the data Directory of our App
       this.file.writeFile(this.file.dataDirectory, pdfName, blob, { replace: true }).then(fileEntry => {
@@ -386,6 +393,37 @@ downloadPdf(schedulerName) {
     // On a browser simply use download!
     this.pdfObj.download();
   }
+}
+
+createJSON(scheduler){
+  //scheduler object to JSON string
+  let content: string = JSON.stringify(scheduler);
+  //file creation on dataDirectory (as a promise)
+  let createPromise = this.file.createFile(this.file.dataDirectory, scheduler.name, true);
+  createPromise.then(fileEntry=>{
+    //the file is created, we can now write
+    let writePromise = this.file.writeFile(this.file.dataDirectory, fileEntry.name+'.pictos', content, {replace:true, append:false});
+    writePromise.then(writtenFile=>{
+      //once the file is written, we can share it
+      let sharePromise = this.socialSharing.share("Planificador con Pictogramas",fileEntry.name+'.pictos', writtenFile.nativeURL);
+      sharePromise.then(res=>{
+        console.log(res);
+      });
+      //error sharing the file
+      sharePromise.catch(shareErr=>{
+        console.log(shareErr);
+      });
+    });
+    //error writing on the file
+    writePromise.catch(writeErr=>{
+      console.log(writeErr);
+    });
+  });
+  //error creating the file
+  createPromise.catch(err=>{
+    console.log(err);
+  });
+
 }
 
 private presentToast(text) {
