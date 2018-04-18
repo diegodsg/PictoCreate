@@ -21,6 +21,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+
 declare var cordova: any;
 @Component({
   selector: 'page-home',
@@ -35,6 +36,10 @@ export class HomePage {
   images : string[];
 
   sampleImage : any;
+
+  texts = []; //text from schedulers
+  base64 = []; //base64 images
+
 
   constructor(public navCtrl: NavController,
               public schedulersService: SchedulersProvider,
@@ -184,22 +189,25 @@ export class HomePage {
   }
 
   //Create PDF
-  createPdf(scheduler: Scheduler) {
 
+
+  createPdf(scheduler: Scheduler) {
+/*
   let content = []; //PDF structure
-  let imageRow : pdfImageRow;
+  let imageRow : pdfImageRow = new pdfImageRow();
   let iRow = [];
 
-  let textRow : pdfTextRow;
+  let textRow : pdfTextRow = new pdfTextRow();
   let tRow = [];
+*/
+
+  var promises = [];
 
   for(let i = 0; i<scheduler.categories.length; i++){
-
     for(let j = 0; j<scheduler.categories[i].items.length; j++){
 
       //Obtain url and image text
       let item: Item = scheduler.categories[i].items[j];
-      let txt = item.itemText;
       let src :string = item.itemImage;
       let isPersonal: boolean = item.isPersonal;
 
@@ -212,44 +220,125 @@ export class HomePage {
         path = 'file:///android_asset/www/'+path;
       }
 
-      //generate the B64 string from the path+filename
+      //generate the B64 promise from the path+filename
+      console.log('path: '+path+', filename: '+fileName);
       let promiseB64 = this.file.readAsDataURL(path, fileName);
 
-      let itemImage: pdfImage;
-      let itemText: pdfText;
-
+      //push promise intro promises
+      promises.push(promiseB64);
+      this.texts.push(item.itemText);
+/*
+      let itemImage: pdfImage = new pdfImage();
+      let itemText: pdfText = new pdfText();
+*/
+/*
       promiseB64.then(dataURL=>{
-        itemImage.image = dataURL;
-        itemText.text = txt;
-        if((j+1)%6!=0){
-          iRow.push(itemImage);
-          tRow.push(itemText);
-        }else{
-          iRow.push(itemImage);
-          itemText.pageBreak= 'after';
-          tRow.push(itemText);
-          imageRow.columns = iRow;
-          textRow.columns = tRow;
-          content.push(imageRow);
-          content.push(textRow);
-        }
 
       });
 
       promiseB64.catch(err=>{
-        console.log(err)
+        console.log('err: '+j)
+        console.log(err);
       });
-
+*/
     }
   }
 
-  this.generatePDF(content, scheduler.name);
+  Promise.all(promises).then(res=>{
+    let count = 0;
+    res.forEach(imagen=>{
+      this.base64.push(imagen);
+      count++;
+      if(count==res.length){
+        this.createBody(this.base64, this.texts, scheduler.name);
+      }
+    });
+    //console.log(this.base64);
+  })
 
 }
 
-generatePDF(content, pdfName){
-  console.log(this.images);
+createBody(images, texts, pdfName){
+  let imgRow = [];
+  let txtRow = [];
+  console.log('images: '+images.length+' texts: '+texts.length);
+  if(images.length==texts.length){
+    let i=0;
+    while(images.length>0){
+      let imageItem = {
+      width: 100,
+      image: images.pop()
+      };
+      console.log('iteration: '+i)
+      console.log(imageItem);
+      imgRow.push(imageItem);
+      i++;
+    }
+    i=0;
+    while(texts.length>0){
+      let textItem = {
+      text: texts.pop(),
+      alignment: 'center'
+      };
+      console.log('iteration: '+i)
+      console.log(textItem);
+      txtRow.push(textItem);
+      i++;
+    }
 
+    var content = [];
+
+    let elements = imgRow.length;
+
+    let img = [];
+    let pageBreak = 0;
+    while(elements>0){
+
+
+      if((elements)%6!=0){
+        img.push(imgRow.pop());
+      }
+      else{
+        img.push(imgRow.pop());
+
+        let iR = {
+          columns: img
+        }
+
+        content.push(JSON.parse(JSON.stringify(iR)));
+        img.length=0;
+        pageBreak++;
+      }
+      if((elements)%6!=0 && elements==1){
+        let iR = {
+          columns: img
+        }
+
+        content.push(JSON.parse(JSON.stringify(iR)));
+      }
+/*
+      if(pageBreak==2){
+        console.log('pageBreak');
+        content.push({
+          pageBreak: "after" // or after
+        });
+        pageBreak = 0;
+      }
+      */
+      elements--;
+    }
+
+    this.generatePDF(content, pdfName);
+
+  }
+  else{
+    console.log('error, item text and images dont match.')
+  }
+}
+
+generatePDF(content, pdfName){
+  console.log('content:');
+  console.log(content);
   var docDefinition = {
     content: content,
     pageOrientation: 'landscape',

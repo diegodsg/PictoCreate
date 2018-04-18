@@ -143,6 +143,7 @@ export class SchedulerEditorPage {
             itemText: [''],
             itemImage: ['assets/imgs/placeholder_pictogram.png'],
             itemFav:[false],
+            isPersonal:false,
         })
       ])
       })
@@ -196,6 +197,9 @@ export class SchedulerEditorPage {
 
         if(fromArasaac == false){
           item.controls[j].patchValue({isPersonal: true});
+        }
+        else{
+          item.controls[j].patchValue({isPersonal: false});
         }
 
         item.controls[j].patchValue({itemImage: data.url});
