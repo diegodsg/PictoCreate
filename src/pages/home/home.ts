@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { NavController, AlertController, ActionSheetController,
          NavParams, ModalController, Modal,
-         Platform } from 'ionic-angular';
+         Platform, ToastController } from 'ionic-angular';
 
 import { SchedulersProvider } from '../../providers/schedulers/schedulers';
 import { SchedulerPage } from '../../pages/scheduler/scheduler';
@@ -52,7 +52,8 @@ export class HomePage {
               private file: File,
               private fileOpener: FileOpener,
               private zone: NgZone,
-              private filePath: FilePath
+              private filePath: FilePath,
+              public toastCtrl: ToastController
               ){
     this.statusBar.backgroundColorByHexString('#2085c1');
     console.log('viewDidLoad');
@@ -123,20 +124,17 @@ export class HomePage {
           icon: 'document',
           handler: () => {
             console.log('a PDF from Scheduler '+scheduler.id+' should be generated.');
+            this.presentToast("Generando PDF...");
             this.createPdf(scheduler);
             //this.downloadPdf();
           }
         },{
-          text: 'Exportar como Imágenes',
-          icon: 'photos',
+          text: 'Exportar como Archivo',
+          icon: 'code-download',
           handler: () => {
-            console.log('export as img clicked');
-          }
-        },{
-          text: 'Enviar por correo como PDF',
-          icon: 'mail',
-          handler: () => {
-            console.log('Send via Mail clicked');
+            console.log('export as file');
+            this.presentToast("Generando archivo...");
+            this.createJSON(scheduler);
           }
         },{
           text: 'Cancel',
@@ -227,20 +225,6 @@ export class HomePage {
       //push promise intro promises
       promises.push(promiseB64);
       this.texts.push(item.itemText);
-/*
-      let itemImage: pdfImage = new pdfImage();
-      let itemText: pdfText = new pdfText();
-*/
-/*
-      promiseB64.then(dataURL=>{
-
-      });
-
-      promiseB64.catch(err=>{
-        console.log('err: '+j)
-        console.log(err);
-      });
-*/
     }
   }
 
@@ -278,7 +262,10 @@ createBody(images, texts, pdfName){
     while(texts.length>0){
       let textItem = {
       text: texts.pop(),
-      alignment: 'center'
+      alignment: 'center',
+      width: 100,
+      marginBottom: 20,
+      marginTop: 5
       };
       console.log('iteration: '+i)
       console.log(textItem);
@@ -288,44 +275,70 @@ createBody(images, texts, pdfName){
 
     var content = [];
 
+    let title = {
+			text: pdfName,
+			style: 'header',
+      marginBottom: 20
+		};
+
+    content.push(title);
+
     let elements = imgRow.length;
 
     let img = [];
+    let text = [];
     let pageBreak = 0;
-    while(elements>0){
 
+    let pageBreaker = {
+      text: ' ',
+      pageBreak: "after",
+      width: 0
+    }
 
-      if((elements)%6!=0){
+    let count = 0;
+    let totalItems = imgRow.length;
+    while(count<totalItems){
+      if((count+1)%6!=0){
         img.push(imgRow.pop());
+        text.push(txtRow.pop());
       }
       else{
         img.push(imgRow.pop());
+        text.push(txtRow.pop());
 
         let iR = {
           columns: img
         }
 
+        let tR = {
+          columns: text
+        }
+
         content.push(JSON.parse(JSON.stringify(iR)));
+        content.push(JSON.parse(JSON.stringify(tR)));
+
         img.length=0;
+        text.length=0;
         pageBreak++;
       }
-      if((elements)%6!=0 && elements==1){
+      if((count+1)%6!=0 && elements==1){
         let iR = {
           columns: img
         }
+        let tR = {
+          columns: text
+        }
 
         content.push(JSON.parse(JSON.stringify(iR)));
+        content.push(JSON.parse(JSON.stringify(tR)));
       }
-/*
-      if(pageBreak==2){
-        console.log('pageBreak');
-        content.push({
-          pageBreak: "after" // or after
-        });
-        pageBreak = 0;
+
+      if(pageBreak==3){
+        content.push(JSON.parse(JSON.stringify(pageBreaker)));
+        pageBreak=0;
       }
-      */
       elements--;
+      count++;
     }
 
     this.generatePDF(content, pdfName);
@@ -337,14 +350,19 @@ createBody(images, texts, pdfName){
 }
 
 generatePDF(content, pdfName){
-  console.log('content:');
   console.log(content);
   var docDefinition = {
     content: content,
+    styles: {
+      header: {
+        fontSize: 18,
+        bold: true
+      }
+    },
     pageOrientation: 'landscape',
     pageMargins: [40,40,40,40],
     defaultStyle: {
-      columnGap: 30
+      columnGap: 30,
     }
   }
   this.pdfObj = pdfMake.createPdf(docDefinition);
@@ -362,13 +380,21 @@ downloadPdf(schedulerName) {
       this.file.writeFile(this.file.dataDirectory, pdfName, blob, { replace: true }).then(fileEntry => {
         // Open the PDf with the correct OS tools
         this.fileOpener.open(this.file.dataDirectory + pdfName, 'application/pdf');
-
       })
     });
   } else {
     // On a browser simply use download!
     this.pdfObj.download();
   }
+}
+
+private presentToast(text) {
+  let toast = this.toastCtrl.create({
+    message: text,
+    duration: 3000,
+    position: 'top'
+  });
+  toast.present();
 }
 
 
