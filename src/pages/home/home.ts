@@ -112,7 +112,7 @@ export class HomePage {
           handler: () => {
             console.log('a PDF from Scheduler '+scheduler.id+' should be generated.');
             this.presentToast("Generando PDF...");
-            this.createPdf(scheduler);
+            this.createB64(scheduler);
           }
         },{
           text: 'Exportar como Archivo',
@@ -173,7 +173,7 @@ export class HomePage {
   }
 
   //Take all images from the scheduler and fill a base64 array of images
-  createPdf(scheduler: Scheduler) {
+  createB64(scheduler: Scheduler) {
   var promises = [];
 
   for(let i = 0; i<scheduler.categories.length; i++){
@@ -194,26 +194,37 @@ export class HomePage {
       }
 
       //generate the B64 promise from the path+filename
-      console.log('path: '+path+', filename: '+fileName);
+      //console.log('path: '+path+', filename: '+fileName);
       let promiseB64 = this.file.readAsDataURL(path, fileName);
 
       //push promise intro promises
       promises.push(promiseB64);
       this.texts.push(item.itemText);
+      //console.log(promises);
     }
   }
 
+  var createBodyPromise;
+
   Promise.all(promises).then(res=>{
-    let count = 0;
+    //console.log(res);
+    //let count = 0;
     res.forEach(imagen=>{
       this.base64.push(imagen);
+/*
       count++;
       if(count==res.length){
         this.createBody(this.base64, this.texts, scheduler.name);
+        console.log("Creating body")
       }
+      */
     });
-    //console.log(this.base64);
-  })
+    console.log(this.base64);
+    this.createBody(this.base64, this.texts, scheduler.name);
+
+  });
+
+
 
 }
 
@@ -330,6 +341,7 @@ createBody(images, texts, pdfName){
       count++;
     }
 
+    console.log('Generating pdf...');
     this.generatePDF(content, pdfName);
 
   }
@@ -357,7 +369,6 @@ generatePDF(content, pdfName){
   }
   this.pdfObj = pdfMake.createPdf(docDefinition);
   this.downloadPdf(pdfName);
-
 }
 
 downloadPdf(schedulerName) {
