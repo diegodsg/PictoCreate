@@ -29,6 +29,7 @@ export class SchedulerPage {
   }
 
   editScheduler(scheduler: Scheduler){
+    this.navCtrl.popToRoot();
     this.navCtrl.push(SchedulerEditorPage,{
       isEdit : true,
       scheduler : scheduler

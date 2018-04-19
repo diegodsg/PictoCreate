@@ -48,6 +48,10 @@ export class SchedulersProvider {
       });
   }
 
+  addSchedulerb(scheduler: Scheduler){
+    return this.storage.get(this.scheduler_key);
+  }
+
   saveScheduler(scheduler: Scheduler){
     //console.log(scheduler);
     this.storage.get(this.scheduler_key).then(res=>{
@@ -79,6 +83,10 @@ addTemplate(scheduler: Scheduler){
     });
 }
 
+addTemplateb(scheduler: Scheduler){
+    return this.storage.get(this.template_key);
+}
+
 
   load(){
     this.storage.get(this.scheduler_key).then((val) => {
@@ -93,6 +101,10 @@ addTemplate(scheduler: Scheduler){
           }
           this.scheds=val;
         });
+  }
+
+  loadb(){
+    return this.storage.get(this.scheduler_key);
   }
 
   loadSchedulers(){
@@ -118,6 +130,10 @@ addTemplate(scheduler: Scheduler){
     this.storage.get(this.template_key).then((val) => {
           this.templates=val;
         });
+  }
+
+  loadTemplatesb(){
+    return this.storage.get(this.template_key);
   }
 
 deleteScheduler(id){
@@ -165,16 +181,28 @@ getScheduler(id){
   });
 }
 
-  updateScheduler(scheduler: Scheduler){
-    for(let i=0; i<this.scheds.length; i++){
-      if(this.scheds[i].id == scheduler.id){
-        this.scheds[i]=scheduler;
-      }
-    }
-    this.storage.set(this.scheduler_key, this.scheds).then((res)=>{
-      console.log("scheduler updated");
-    })
-  }
+getSchedulerb(id){
+  return this.storage.get(this.scheduler_key);
+}
 
+updateScheduler(scheduler: Scheduler){
+  for(let i=0; i<this.scheds.length; i++){
+    if(this.scheds[i].id == scheduler.id){
+      this.scheds[i]=scheduler;
+    }
+  }
+  this.storage.set(this.scheduler_key, this.scheds).then((res)=>{
+    console.log("scheduler updated");
+  });
+}
+
+updateSchedulerb(scheduler: Scheduler){
+  for(let i=0; i<this.scheds.length; i++){
+    if(this.scheds[i].id == scheduler.id){
+      this.scheds[i]=scheduler;
+    }
+  }
+  return this.storage.set(this.scheduler_key, this.scheds);
+}
 
 }

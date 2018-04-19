@@ -66,8 +66,14 @@ export class SchedulerEditorPage {
               private screenshot: Screenshot,
               private alertCtrl: AlertController) {
 
+    /*There are different ways to use the editor
+      0: new
+      -for the next ones we need to receive a scheduler as a parameter-
+      1: edit
+      2: template
+      3: create new from template
+    */
     this.edit = this.navParams.get("isEdit");
-
     if (this.edit == 1){
       this.scheduler = this.navParams.get("scheduler");
       this.createForm();
@@ -91,20 +97,20 @@ export class SchedulerEditorPage {
     }
   }
 
+  //creates the form and adds a category
   createForm(){
     this.schedulerForm = this.fb.group({
-    // you can also set initial formgroup inside if you like
-    id: [''],
-    name: ['', Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z ]*'), Validators.required])],
-    preview: [''],
-    hasImage: true,
-    hasText: true,
-    categories: this.fb.array([])
+      id: [''],
+      name: ['', Validators.compose([Validators.maxLength(30), Validators.pattern('[a-zA-Z ]*'), Validators.required])],
+      preview: [''],
+      hasImage: true,
+      hasText: true,
+      categories: this.fb.array([])
     })
-
     this.addNewCategory();
   }
 
+  //receive scheduler and displays it on the editor
   setForm(scheduler: Scheduler){
     this.schedulerForm.patchValue({
       id: scheduler.id,
@@ -124,7 +130,6 @@ export class SchedulerEditorPage {
       let allCategories = <FormArray> this.schedulerForm.controls.categories as FormArray;
       let cat = <FormGroup> allCategories.controls[i] as FormGroup;
       cat.setControl('items', itemsFromArray);
-
       this.toggle[i]=true;
     }
 
@@ -137,7 +142,6 @@ export class SchedulerEditorPage {
         category: [''],
         color: ['#FFFFFF'],
         textColor: ['#000000'],
-        // nested form array, you could also add a form group initially
         items: this.fb.array([
           this.fb.group({
             itemText: [''],
@@ -171,10 +175,8 @@ export class SchedulerEditorPage {
   }
 
   favItem(control, index) {
-
     if(control.controls[index].get("itemFav").value==false){
       control.controls[index].patchValue({itemFav: true});
-
     }
     else{
       control.controls[index].patchValue({itemFav: false});
@@ -190,18 +192,15 @@ export class SchedulerEditorPage {
     modal.present();
     modal.onDidDismiss((data)=>{
       if(data != null){
-        /*patchValue({image: data.url})*/
         let path = data.url.substr(0,1);
         let fromArasaac : boolean = path == 'r';
         let item = <FormArray> this.categories.controls[i].get('items');
-
         if(fromArasaac == false){
           item.controls[j].patchValue({isPersonal: true});
         }
         else{
           item.controls[j].patchValue({isPersonal: false});
         }
-
         item.controls[j].patchValue({itemImage: data.url});
         console.log(item.controls[j]);
 
@@ -278,16 +277,12 @@ export class SchedulerEditorPage {
         {
           text: 'Guardar',
           handler: () => {
-
               this.presentToastBottom("Guardando planificador");
               saveConfirm.dismiss();
               let TIME_IN_MS = 500;
               let hideFooterTimeout = setTimeout( () => {
                 this.savePicto();
               }, TIME_IN_MS);
-
-              //this.savePicto(); //EraseMe
-
           }
         },
         {
@@ -302,7 +297,7 @@ export class SchedulerEditorPage {
   }
 
   savePicto(){
-    //check values.
+    //check some values first...
     if(this.schedulerForm.get('name').value==""){
       this.presentToast("Introduce un nombre para el planificador");
     }
@@ -310,53 +305,115 @@ export class SchedulerEditorPage {
       this.presentToast("El planificador está vacío");
     }
     else{
+      //allright, let's save it or update it...
+      //create random (enough?) ID
       let id =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
       this.screenshot.save('jpg', 80, id).then(res => {
-          //create random ID
           this.scheduler = this.schedulerForm.value;
           //this.scheduler.preview = this.scheduler.categories[0].items[0].itemImage;
           this.scheduler.preview = res.filePath;
           //this.scheduler.preview = 'assets/imgs/plantillaV.png'
           if(this.edit == 0 || this.edit==3 || this.edit==undefined){
+          /*
               this.scheduler.id = id;
               this.schedulerService.addScheduler(this.scheduler);
+              */
+              this.scheduler.id = id;
+              this.schedulerService.addSchedulerb(this.scheduler).then(res=>{
+                if(res==undefined){
+                    res = [];
+                }
+                this.schedulerService.storage.get('listSize').then((numScheds) => {
+                    if(numScheds==undefined){
+                        numScheds = 1;
+                    }
+                    numScheds++;
+                    res.push(this.scheduler);
+                    console.log(res);
+                    this.schedulerService.storage.set(this.schedulerService.scheduler_key, res);
+                    this.schedulerService.storage.set('listSize',numScheds);
+                    this.schedulerService.loadb().then((val) => {
+                          if(val == null){
+                            this.schedulerService.emptyList=true;
+                          }
+                          else if(val.length == 0){
+                            this.schedulerService.emptyList=true;
+                          }
+                          else{
+                            this.schedulerService.emptyList=false;
+                          }
+                          this.schedulerService.scheds=val;
+                        });
+                    this.navCtrl.pop();
+                });
+              });
           }
           else if(this.edit == 1){
-              this.schedulerService.updateScheduler(this.scheduler);
+              this.schedulerService.updateSchedulerb(this.scheduler).then((res)=>{
+                this.schedulerService.loadb().then((val) => {
+                      if(val == null){
+                        this.schedulerService.emptyList=true;
+                      }
+                      else if(val.length == 0){
+                        this.schedulerService.emptyList=true;
+                      }
+                      else{
+                        this.schedulerService.emptyList=false;
+                      }
+                      this.schedulerService.scheds=val;
+                    });
+                this.navCtrl.pop();
+              });;
           }
           else if(this.edit== 2){
-              this.schedulerService.addTemplate(this.scheduler);
+              this.schedulerService.addTemplateb(this.scheduler).then((res) => {
+                  if(res==undefined){
+                      res = [];
+                  }
+                  this.schedulerService.storage.get('listSize_templates').then((numScheds) => {
+                      if(numScheds==undefined){
+                          numScheds = 1;
+                      }
+                      numScheds++;
+                      res.push(this.scheduler);
+                      console.log(res);
+                      this.schedulerService.storage.set(this.schedulerService.template_key, res);
+                      this.schedulerService.storage.set('listSize_templates',numScheds);
+                      this.schedulerService.loadb().then((val) => {
+                            if(val == null){
+                              this.schedulerService.emptyList=true;
+                            }
+                            else if(val.length == 0){
+                              this.schedulerService.emptyList=true;
+                            }
+                            else{
+                              this.schedulerService.emptyList=false;
+                            }
+                            this.schedulerService.scheds=val;
+                          });
+                      this.schedulerService.loadTemplatesb().then((val) => {
+                            this.schedulerService.templates=val;
+                          });
+                      this.navCtrl.pop();
+                  });
+              });
           }
-              this.schedulerService.load();
-              this.navCtrl.pop();
+
+          this.schedulerService.loadb().then((val) => {
+                if(val == null){
+                  this.schedulerService.emptyList=true;
+                }
+                else if(val.length == 0){
+                  this.schedulerService.emptyList=true;
+                }
+                else{
+                  this.schedulerService.emptyList=false;
+                }
+                this.schedulerService.scheds=val;
+              });
+          this.navCtrl.pop();
 
       });
     }
   }
-
-/*
-  onViewWillLeave(){
-
-    let exitConfirm = this.alertCtrl.create({
-      title: 'Abandonar',
-      message: 'Si terminas sin guardar el planificador, se perderan todos los datos.',
-      buttons: [
-        {
-          text: 'Abandonar',
-          handler: () => {
-          this.navCtrl.pop();
-          }
-        },
-        {
-          role: 'cancel',
-          text: 'Cancelar',
-          handler: () => {
-          }
-        }
-      ]
-    });
-    exitConfirm.present();
-    return false;
-  }
-*/
 }

@@ -63,26 +63,9 @@ export class HomePage {
     console.log('viewDidLoad');
     this.schedulersService.load();
     this.schedulersService.loadTemplates();
-
-    let promise = this.schedulersService.loadSchedulers();
-    promise.then((val)=>{
-      if(val == null){
-        this.schedulersService.emptyList=true;
-      }
-      else if(val.length == 0){
-        this.schedulersService.emptyList=true;
-      }
-      else{
-        this.schedulersService.emptyList=false;
-      }
-        this.schedulersService.scheds = val;
-        this.schedulers=val;
-        console.log(this.schedulers);
-    });
   }
 
   ionViewDidLoad(){
-
     this.zone.run(()=>{
       this.schedulersService.load();
       this.schedulersService.loadTemplates();
@@ -130,7 +113,6 @@ export class HomePage {
             console.log('a PDF from Scheduler '+scheduler.id+' should be generated.');
             this.presentToast("Generando PDF...");
             this.createPdf(scheduler);
-            //this.downloadPdf();
           }
         },{
           text: 'Exportar como Archivo',

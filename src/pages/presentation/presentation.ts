@@ -19,6 +19,8 @@ export class PresentationPage {
   paused: boolean = true;
   favedItems: Item[] = [];
 
+  slidesPerView = 1;
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.currentScheduler = this.navParams.get("scheduler");
 
@@ -37,6 +39,12 @@ export class PresentationPage {
         }
       }
     }
+  }
+
+  updateSlides(){
+    console.log("rangeChanged");
+    this.slides.slidesPerView = this.slidesPerView;
+    this.slides.update();
   }
 
   startSlides(){
